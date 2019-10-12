@@ -5,8 +5,6 @@ exports.up = function(knex) {
         table.string('name')
         table.string('userImage')
         table.string('slug')
-        table.integer('postId')
-        table.foreign('postId').references('posts.id')
       })
 };
 
