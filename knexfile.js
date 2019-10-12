@@ -3,10 +3,14 @@
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'pg',
     connection: {
-      filename: './dev.sqlite3'
-    }
+      host: 'localhost',
+      user: 'postgres',
+      database: '',
+      filename: './tumblr.db'
+    },
+    useNullAsDefault: true
   },
 
   staging: {
