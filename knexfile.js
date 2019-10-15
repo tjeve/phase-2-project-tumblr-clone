@@ -7,8 +7,8 @@ module.exports = {
     connection: {
       host: 'localhost',
       user: 'postgres',
-      database: '',
-      filename: './tumblr.db'
+      database: 'tumblr',
+      filename: './test2.db'
     },
     useNullAsDefault: true
   },
