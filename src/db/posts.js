@@ -2,7 +2,7 @@ const {db} = require('../database.js')
 
 const getAllPostsQuery = `
     SELECT *
-    FROM "Posts
+    FROM "Posts"
 `
 
 function getAllPosts () {
@@ -11,11 +11,11 @@ function getAllPosts () {
 
 const getOnePostQuery = `
     SELECT *
-    FROM Posts
+    FROM "Posts"
     WHERE id = ?`,[id]
 
 function getOnePost () {
-    return db.raw('SELECT * FROM Posts WHERE id = ?',[id])
+    return db.raw('SELECT * FROM "Posts" WHERE id = ?',[id])
 }
 
 // function createPost () { ... }
