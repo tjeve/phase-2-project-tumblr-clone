@@ -8,7 +8,6 @@ const port = 3000
 
 const dashboardTemplate = fs.readFileSync('./templates/dashboard.mustache', 'utf8')
 
-
 // app.get('/homepage', function (req, res) {
 //   getAllUsers()
 //     .then(function (allUsers) {
@@ -16,16 +15,15 @@ const dashboardTemplate = fs.readFileSync('./templates/dashboard.mustache', 'utf
 //     })
 // })
 
-
 // GET all users
 
 app.get('/users', function (request, response, next) {
   getAllUsers()
-    .then(function(allUsers) {
+    .then(function (allUsers) {
       console.log('asdf', allUsers)
       response.send(allUsers.rows)
     })
-    .catch(function() {
+    .catch(function () {
       response.status(500).send('No Users found')
     })
 })
@@ -34,10 +32,10 @@ app.get('/users', function (request, response, next) {
 
 app.get('/posts', function (request, response, next) {
   getAllPosts()
-    .then(function(allPosts) {
+    .then(function (allPosts) {
       response.send(allPosts.rows)
     })
-    .catch(function() {
+    .catch(function () {
       response.status(500).send('No Posts found')
     })
 })
@@ -56,11 +54,9 @@ app.get('/users/:slug', function (req, res) {
     })
 })
 
-
 app.listen(port, function () {
-    console.log('Listening on port ' + port + ' 👍')
-  })
-
+  console.log('Listening on port ' + port + ' 👍')
+})
 
 // HTML Rendering
 
@@ -75,7 +71,6 @@ app.listen(port, function () {
 //   `
 // }
 
-
 // Database Queries
 const getAllUsersQuery = `
 SELECT *
@@ -88,23 +83,21 @@ FROM "Posts"
 `
 
 function getAllUsers () {
-return db.raw(getAllUsersQuery)
+  return db.raw(getAllUsersQuery)
 }
 
 function getSingleUser (slug) {
   console.log('wut is slug', slug)
-  return db.raw(`SELECT * FROM "Users" WHERE "slug" = '?'`, [slug])
-  .then(function (results) {
-    if (results.length !== 1) {
-      throw null
-    } else {
-      return results[0]
-    }
-  })
+  return db.raw('SELECT * FROM "Users" WHERE "slug" = \'?\'', [slug])
+    .then(function (results) {
+      if (results.length !== 1) {
+        throw null
+      } else {
+        return results[0]
+      }
+    })
 }
 
 function getAllPosts () {
   return db.raw(getAllPostsQuery)
-  }
-
-
+}
