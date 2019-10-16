@@ -1,4 +1,4 @@
-//I think this connects everything to the database and allows you to console.log as everything happens
+//I think this connects everything to the database and use the logging.js module to allow you to console.log everything as it happens
 const log = require ('./logging.js') //accesses logging module
 const dbConfigs = require('../knexfile.js') //accesses knexfile module that specifies the database to use
 
