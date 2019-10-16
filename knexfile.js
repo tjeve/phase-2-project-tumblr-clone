@@ -9,7 +9,7 @@ module.exports = {
       user: 'postgres',
       database: 'tumblr',
       filename: './test2.db'
-},
+    },
     useNullAsDefault: true
   },
 
