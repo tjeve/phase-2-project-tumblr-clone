@@ -6,14 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
-    "build": "mustache dataView.json myTemplate.mustache > public/output.html"
+    "build": "mustache dataView.json myTemplate.mustache > ./templates/homepage.html"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "4.17.1",
     "knex": "0.19.5",
-    "mustache": "^3.1.0",
+    "mustache": "3.1.0",
     "nodemon": "1.19.3",
     "pg": "7.12.1",
     "sqlite3": "4.1.0"

@@ -7,10 +7,10 @@ const db = require('knex')(dbConfigs.development)
 const { getAllPosts } = require('./src/db/posts.js')
 
 const port = 3000
-
+console.log(port)
 // --------------------------------------------------------------------------
 // Express.js Endpoints
-const homepageTemplate = fs.readFileSync('./templates.homepage.html', 'utf8')
+const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 
 app.get('/', function (req, res) {
   getAllPosts()
@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
       // insert templating string here
       res.send()
     })
-  app.send(Mustache.render(homePageTemplate, { postListHTML: renderAllPosts(allPosts) }))
+  app.send(Mustache.render(homePageTemplate, { postListHTML: renderPost(posts) }))
 
   // app.get('/homepage', function (req, res) {
   //   getAllUsers()
@@ -75,7 +75,7 @@ app.get('/', function (req, res) {
 
   function renderPost (post) {
     return `<div>
-    <h1>${post.userId}</h1>
+    <h1>${post.id}</h1>
     <img src=${post.postedImage} height="200" width="100">
     <img src=${post.userImage} height="7" width="7">
     <div>${post.userId}</div>
