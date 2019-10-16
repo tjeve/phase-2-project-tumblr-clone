@@ -3,11 +3,11 @@ const express = require('express')
 const app = express()
 const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
+const mustache = require('mustache')
 
 const { getAllPosts } = require('./src/db/posts.js')
 
 const port = 3000
-console.log(port)
 // --------------------------------------------------------------------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
       // insert templating string here
       res.send()
     })
-  app.send(Mustache.render(homePageTemplate, { postListHTML: renderPost(posts) }))
+  app.send(mustache.render(homepageTemplate, { postListHTML: renderPost(posts) }))
 
   // app.get('/homepage', function (req, res) {
   //   getAllUsers()
@@ -26,7 +26,7 @@ app.get('/', function (req, res) {
   //       res.send(mustache.render(dashboardTemplate, { usersHTML: renderAllUsers(allUsers)}))
   //     })
   // })
-
+  })
   // GET all users
 
   app.get('/users', function (request, response, next) {
@@ -105,23 +105,18 @@ SELECT *
 FROM "Posts"
 `
 
-  function getAllUsers () {
-    return db.raw(getAllUsersQuery)
-  }
+function getAllUsers () {
+  return db.raw(getAllUsersQuery)
+}
 
-  function getSingleUser (slug) {
-    console.log('wut is slug', slug)
-    return db.raw('SELECT * FROM "Users" WHERE "slug" = \'?\'', [slug])
-      .then(function (results) {
-        if (results.length !== 1) {
-          throw null
-        } else {
-          return results[0]
-        }
-      })
-  }
-
-  function getAllPosts () {
-    return db.raw(getAllPostsQuery)
-  }
-})
+function getSingleUser (slug) {
+  console.log('wut is slug', slug)
+  return db.raw('SELECT * FROM "Users" WHERE "slug" = \'?\'', [slug])
+    .then(function (results) {
+      if (results.length !== 1) {
+        throw null
+      } else {
+        return results[0]
+      }
+    })
+}
