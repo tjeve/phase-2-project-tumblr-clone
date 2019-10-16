@@ -12,7 +12,7 @@ const dashboardTemplate = fs.readFileSync('./templates/dashboard.mustache', 'utf
 // app.get('/homepage', function (req, res) {
 //   getAllUsers()
 //     .then(function (allUsers) {
-//       res.send(mustache.render(dashboardTemplate, { usersHTML: renderAllCohorts(allCohorts) }))
+//       res.send(mustache.render(dashboardTemplate, { usersHTML: renderAllUsers(allUsers)}))
 //     })
 // })
 
@@ -22,6 +22,7 @@ const dashboardTemplate = fs.readFileSync('./templates/dashboard.mustache', 'utf
 app.get('/users', function (request, response, next) {
   getAllUsers()
     .then(function(allUsers) {
+      console.log('asdf', allUsers)
       response.send(allUsers.rows)
     })
     .catch(function() {
@@ -34,7 +35,6 @@ app.get('/users', function (request, response, next) {
 app.get('/posts', function (request, response, next) {
   getAllPosts()
     .then(function(allPosts) {
-      console.log(allPosts.rows)
       response.send(allPosts.rows)
     })
     .catch(function() {
@@ -60,6 +60,20 @@ app.get('/users/:slug', function (req, res) {
 app.listen(port, function () {
     console.log('Listening on port ' + port + ' 👍')
   })
+
+
+// HTML Rendering
+
+// function renderUser (user) {
+//   return `
+//   <div style="border: solid red 1px">
+//     <div class="img-container">
+
+//     </div>
+//     <li><a href="/cohorts/${user.slug}">${user.name}</a></li>
+//   </div>
+//   `
+// }
 
 
 // Database Queries
