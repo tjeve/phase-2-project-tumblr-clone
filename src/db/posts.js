@@ -1,4 +1,4 @@
-const {db} = require('../database.js')
+const { db } = require('../database.js')
 
 const getAllPostsQuery = `
     SELECT *
@@ -6,13 +6,13 @@ const getAllPostsQuery = `
 `
 
 function getAllPosts () {
-    return db.raw(getAllPostsQuery)
+  return db.raw(getAllPostsQuery)
 }
 
 function getOnePost () {
-    return db.raw('SELECT * FROM "Posts" WHERE id = ?',[id])
+  return db.raw('SELECT * FROM "Posts" WHERE id = ?', [id])
 }
 
 // function getAllPostsFromOneUser () { ... }
 
-// function createPost () { ... } 
+// function createPost () { ... }
