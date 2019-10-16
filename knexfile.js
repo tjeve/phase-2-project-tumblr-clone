@@ -8,12 +8,8 @@ module.exports = {
       host: 'localhost',
       user: 'postgres',
       database: 'tumblr',
-<<<<<<< HEAD
-      filename: './tumblr.db'
-=======
       filename: './test2.db'
->>>>>>> e19cdc8e32e3afda884dc3e4b453fb87d5e320e8
-    },
+},
     useNullAsDefault: true
   },
 
