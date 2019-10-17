@@ -5,97 +5,52 @@ const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 
-const { getAllPosts } = require('./src/db/posts.js')
+const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
 
-const port = 3000
+const port = 4000
 // --------------------------------------------------------------------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 
+function getAllThingsPosted() {
+  return db.raw(`SELECT * FROM "Posts"`)
+}
+
 app.get('/', function (req, res) {
-  getAllPosts()
-    .then(function (allPosts) {
-      // insert templating string here
-      res.send()
+  getAllThingsPosted() // The Promise
+    .then(function (allPosts) { // When the Promise is received
+      console.log(allPosts.rows)
+      console.log("Your seed data should show up here") // console log this message
+      // res.send(allPosts.rows) // then send back the rows full of data from your database
+      res.send(mustache.render(homepageTemplate, { postsHTML: renderPosts(allPosts.rows) })) // Mustache is working! But why is everything undefined?
+      // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
+      // res.send(allPosts.rows)
     })
-  app.send(mustache.render(homepageTemplate, { postListHTML: renderPost(posts) }))
+    .catch(function () {
+      res.status(500).send('No Posts found')
+    })
+})
 
-  // app.get('/homepage', function (req, res) {
-  //   getAllUsers()
-  //     .then(function (allUsers) {
-  //       res.send(mustache.render(dashboardTemplate, { usersHTML: renderAllUsers(allUsers)}))
-  //     })
-  // })
-  })
-  // GET all users
 
-  app.get('/users', function (request, response, next) {
-    getAllUsers()
-      .then(function (allUsers) {
-        console.log('asdf', allUsers)
-        response.send(allUsers.rows)
-      })
-      .catch(function () {
-        response.status(500).send('No Users found')
-      })
-  })
+app.listen(port, function () {
+  console.log('Listening on port ' + port + ' 👍')
+})
 
-  // GET all posts
+app.get('/users', function (request, response, next) {
+  getAllUsers()
+    .then(function (allUsers) {
+      console.log('asdf', allUsers)
+      response.send(allUsers.rows)
+    })
+    .catch(function () {
+      response.status(500).send('No Users found')
+    })
+})
 
-  app.get('/posts', function (request, response, next) {
-    getAllPosts()
-      .then(function (allPosts) {
-        response.send(allPosts.rows)
-      })
-      .catch(function () {
-        response.status(500).send('No Posts found')
-      })
-  })
+// --------------------------------------------------------------------------
+// database Queries and Functions
 
-  // GET single user
-
-  app.get('/users/:slug', function (req, res) {
-    getSingleUser(res.params.slug)
-    console.log('wut is slug', slug)
-      .then(function (user) {
-        console.log('wut is user', user)
-        res.send(user.params.slug)
-      })
-      .catch(function () {
-        res.status(500).send('User not available')
-      })
-  })
-
-  app.listen(port, function () {
-    console.log('Listening on port ' + port + ' 👍')
-  })
-
-  // --------------------------------------------------------------------------
-  // HTML Rendering
-
-  function renderPost (post) {
-    return `<div>
-    <h1>${post.id}</h1>
-    <img src=${post.postedImage} height="200" width="100">
-    <img src=${post.userImage} height="7" width="7">
-    <div>${post.userId}</div>
-    <p>${post.postedMessage}</p>
-  </div>`
-  }
-
-  function renderAllPosts (allPosts) {
-    return allPosts.map(renderPost).join('')
-  }
-
-  /*
-List of Questions:
-1. How can I make sure that I am querying my data correctly?
-2. How do I make sure my data is being rendered correctly?
-3. Why can't I see what's going on on Port 3000?
-*/
-
-  // Database Queries
-  const getAllUsersQuery = `
+const getAllUsersQuery = `
 SELECT *
 FROM "Users"
 `
@@ -109,14 +64,18 @@ function getAllUsers () {
   return db.raw(getAllUsersQuery)
 }
 
-function getSingleUser (slug) {
-  console.log('wut is slug', slug)
-  return db.raw('SELECT * FROM "Users" WHERE "slug" = \'?\'', [slug])
-    .then(function (results) {
-      if (results.length !== 1) {
-        throw null
-      } else {
-        return results[0]
-      }
-    })
+function renderPosts (post) {
+  function createSinglePostHTML (postObject) {
+    return `<div>
+              <h1>${post.id}</h1>
+              <img src=${post.postedImage} height="600" width="400">
+              <div>${post.userId}</div>
+              <img src=${post.userImage} height="20" width="20">
+              <p>${post.postedMessage}</p>
+            </div>`
+  }
+  
+  let CreateAllPostsHTML = post.map(createSinglePostHTML)
+
+  return CreateAllPostsHTML.join('')
 }
