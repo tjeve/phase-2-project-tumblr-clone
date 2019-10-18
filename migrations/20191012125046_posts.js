@@ -13,5 +13,5 @@ exports.up = function (knex) {
 }
 
 exports.down = function (knex) {
-  return knex.schema.raw('DROP TABLE Posts')
+  return knex.schema.raw('DROP TABLE "Posts"')
 }
