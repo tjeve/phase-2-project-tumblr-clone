@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "standard",
     "start": "nodemon index.js",
     "build": "mustache dataView.json myTemplate.mustache > public/output.html"
   },
@@ -17,5 +17,8 @@
     "nodemon": "1.19.3",
     "pg": "7.12.1",
     "sqlite3": "4.1.0"
+  },
+  "devDependencies": {
+    "standard": "^14.3.1"
   }
 }
