@@ -4,8 +4,10 @@ const app = express()
 const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
+// const bodyparser = require('body-parser')
 
 const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
+// app.use(bodyparser)
 
 const port = 4000
 // --------------------------------------------------------------------------
@@ -16,10 +18,12 @@ function getAllThingsPosted() {
   return db.raw(`SELECT * FROM "Posts"`)
 }
 
+app.use('/', express.static(__dirname + '/public'))
+
 app.get('/', function (req, res) {
   getAllThingsPosted() // The Promise
     .then(function (allPosts) { // When the Promise is received
-      console.log(allPosts.rows)
+      // console.log(allPosts.rows)
       console.log("Your seed data should show up here") // console log this message
       // res.send(allPosts.rows) // then send back the rows full of data from your database
       res.send(mustache.render(homepageTemplate, { postsHTML: renderPosts(allPosts.rows) })) // Mustache is working! But why is everything undefined?
@@ -36,16 +40,34 @@ app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
 })
 
+// GET /users
+
 app.get('/users', function (request, response, next) {
+  // console.log('wuts disssss', request)
   getAllUsers()
     .then(function (allUsers) {
-      console.log('asdf', allUsers)
       response.send(allUsers.rows)
     })
     .catch(function () {
       response.status(500).send('No Users found')
     })
 })
+
+// POST new text post
+
+app.post('/posts', function (req, res) {
+ console.log(req.body, "this is req.body")
+  createPost(req.body)
+  .then(function () {
+    // res.send(mustache.render(successTemplate, { successHTML: renderSuccessInfo() }))
+    res.send('hello world')
+  })
+  .catch(function () {
+    res.status(500).send('Not able to create new post')
+  })
+})
+
+
 
 // --------------------------------------------------------------------------
 // database Queries and Functions
@@ -67,15 +89,27 @@ function getAllUsers () {
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
     return `<div>
-              <h1>${post.id}</h1>
-              <img src=${post.postedImage} height="600" width="400">
-              <div>${post.userId}</div>
-              <img src=${post.userImage} height="20" width="20">
-              <p>${post.postedMessage}</p>
+              <h1>${postObject.id}</h1>
+              <img src=${postObject.postedImage} height="600" width="400">
+              <div>${postObject.userId}</div>
+              <img src=${postObject.userImage} height="20" width="20">
+              <p>${postObject.postedMessage}</p>
             </div>`
   }
   
   let CreateAllPostsHTML = post.map(createSinglePostHTML)
 
   return CreateAllPostsHTML.join('')
+}
+
+function createPost (post) {
+  console.log("~~~~~~~~~~", post)
+  return db.raw('INSERT INTO "Posts" (postedMessage) VALUES (?, ?)', [post.postedMessage])
+}
+
+function renderSuccessInfo () {
+  return `
+    <p>Yay u did it.</p>
+    <p><a href="/">Go Back to Homepage</a></p>
+  `
 }

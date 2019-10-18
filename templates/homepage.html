@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <!-- Bootstrap-->
-    <link rel="stylesheet" href="./templates/homepage.css">
+    <link rel="stylesheet" href="/css/homepage.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -17,7 +17,63 @@
     <title>Tumblr Clone</title>
 </head>
 <body cz-shortcut-listen="true">
-    <h1>Welcome to Tumblr!</h1>
+    <h1 class="title">Welcome to Tumblr!</h1>
+    <div class="post-header">
+        <div class="icon-container">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                TEXT
+              </button>
+
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Text Post</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+    <!-- ===================FORM STARTS HERE ====================== -->
+
+                        <form action="/posts" method="post" id="form1">
+                            <textarea name="postedMessage" rows="7" cols="50">
+                               Your text here
+                                </textarea>
+                        
+                          </form>
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" form="form1">Post</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+        </div>
+        <div class="icon-container">
+            PHOTO
+        </div>
+        <div class="icon-container">
+            QUOTE
+        </div>
+        <div class="icon-container">
+            LINK
+        </div>
+        <div class="icon-container">
+            CHAT
+        </div>
+        <div class="icon-container">
+           AUDIO
+        </div>
+        <div class="icon-container">
+            VIDEO
+        </div>
+
+    </div>
     <main>{{{postsHTML}}}</main>
 </body>
 </html>
