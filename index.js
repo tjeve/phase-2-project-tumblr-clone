@@ -6,6 +6,7 @@ const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 // const bodyParser = require('body-parser')
 app.use(express.json())
+app.use(express.urlencoded())
 const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser)
@@ -14,10 +15,8 @@ const port = 4000;
 // --------------------------------------------------------------------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
+const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
 
-function getAllThingsPosted() {
-  return db.raw(`SELECT * FROM "Posts"`)
-}
 
 app.use('/', express.static(__dirname + '/public'))
 
@@ -61,8 +60,8 @@ app.post('/posts', function (req, res) {
  console.log(req.body, "this is req.body")
   createPost(req.body)
   .then(function () {
-    // res.send(mustache.render(successTemplate, { successHTML: renderSuccessInfo() }))
-    res.send('hello world')
+    res.send(mustache.render(homepageTemplate, { postsHTML: renderPosts(allPosts.rows) }))
+    // res.send('hello world')
   })
   .catch(function () {
     res.status(500).send('Not able to create new post')
@@ -86,6 +85,10 @@ FROM "Posts"
 
 function getAllUsers () {
   return db.raw(getAllUsersQuery)
+}
+
+function getAllThingsPosted() {
+  return db.raw(`SELECT * FROM "Posts"`)
 }
 
 function renderPosts (post) {
