@@ -138,3 +138,5 @@ function createPost (postObject) {
 //     <p><a href="/">Go Back to Homepage</a></p>
 //   `
 // }
+
+require('./src/local-auth.js')(app)

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>User Registration</title>
+</head>
+
+<body>
+    <form action="/register" method="post">
+        <div>
+            <label>Username:</label>
+            <input type="text" name="name" required/>
+        </div>
+        <div>
+            <label>User Image URL:</label>
+            <input type="text" name="userImage" />
+        </div>
+        <div>
+            <label>Slug:</label>
+            <input type="text" name="slug" />
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" required/>
+        </div>
+        <button type="submit">Submit!</button>
+    </form>
+</body>
+
+</html>
