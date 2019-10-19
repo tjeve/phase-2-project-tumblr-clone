@@ -6,7 +6,6 @@ exports.seed = function (knex) {
       // Inserts seed entries
       return knex('Posts').insert([
         {
-          id: 0,
           userId: 0,
           postedImage: 'https://www.dw.com/image/40320815_303.jpg',
           numberOfNotes: 34,
@@ -14,7 +13,6 @@ exports.seed = function (knex) {
           postedMessage: 'Voluptate occaecat est minim esse eiusmod aliquip elit Lorem sunt cupidatat minim commodo pariatur.'
         },
         {
-          id: 1,
           userId: 1,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 25,
@@ -22,7 +20,6 @@ exports.seed = function (knex) {
           postedMessage: 'Est aliquip sunt consectetur ut qui in Lorem exercitation fugiat amet excepteur anim elit laborum.'
         },
         {
-          id: 2,
           userId: 2,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 0,
@@ -30,7 +27,6 @@ exports.seed = function (knex) {
           postedMessage: 'Ullamco eu sint consequat irure.'
         },
         {
-          id: 3,
           userId: 3,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 33,
@@ -38,7 +34,6 @@ exports.seed = function (knex) {
           postedMessage: 'Cillum occaecat non nostrud enim fugiat nulla aute tempor deserunt.'
         },
         {
-          id: 4,
           userId: 4,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 21,
@@ -46,7 +41,6 @@ exports.seed = function (knex) {
           postedMessage: 'Ad irure eu eiusmod proident dolor voluptate culpa ea nulla et.'
         },
         {
-          id: 5,
           userId: 5,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 39,
@@ -54,7 +48,6 @@ exports.seed = function (knex) {
           postedMessage: 'Fugiat minim elit minim non exercitation consequat qui esse ea Lorem.'
         },
         {
-          id: 6,
           userId: 6,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 14,
@@ -62,7 +55,6 @@ exports.seed = function (knex) {
           postedMessage: 'Id veniam ea ut laboris nulla cupidatat consectetur.'
         },
         {
-          id: 7,
           userId: 7,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 20,
@@ -70,7 +62,6 @@ exports.seed = function (knex) {
           postedMessage: 'Ea proident incididunt sit duis voluptate id mollit.'
         },
         {
-          id: 8,
           userId: 1,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 9,
@@ -78,7 +69,6 @@ exports.seed = function (knex) {
           postedMessage: 'Velit mollit voluptate minim dolor laborum pariatur.'
         },
         {
-          id: 9,
           userId: 2,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 1,
@@ -86,7 +76,6 @@ exports.seed = function (knex) {
           postedMessage: 'Consequat labore quis excepteur ex.'
         },
         {
-          id: 10,
           userId: 3,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 6,
@@ -94,7 +83,6 @@ exports.seed = function (knex) {
           postedMessage: 'Voluptate est anim velit velit eu reprehenderit magna eiusmod laboris sunt do mollit exercitation.'
         },
         {
-          id: 11,
           userId: 4,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 0,
@@ -102,7 +90,6 @@ exports.seed = function (knex) {
           postedMessage: 'Ex pariatur incididunt ex in amet nostrud consequat quis fugiat.'
         },
         {
-          id: 12,
           userId: 5,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 12,
@@ -110,7 +97,6 @@ exports.seed = function (knex) {
           postedMessage: 'Esse reprehenderit amet eu nulla excepteur dolor ad aliquip officia.'
         },
         {
-          id: 13,
           userId: 6,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 36,
@@ -118,7 +104,6 @@ exports.seed = function (knex) {
           postedMessage: 'Laborum reprehenderit in ad nostrud culpa sunt dolore tempor occaecat amet.'
         },
         {
-          id: 14,
           userId: 7,
           postedImage: 'http://placehold.it/32x32',
           numberOfNotes: 38,
