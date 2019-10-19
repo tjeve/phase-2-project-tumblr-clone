@@ -1,0 +1,40 @@
+main {
+    background-color: #001936;
+}
+
+p {
+    color: white;
+}
+
+.title {
+    color: black;
+}
+
+h1 {
+    color: white;
+}
+
+.icon-container {
+    height: 80px;
+    width: 80px;
+    padding-top: 25px;
+    text-align: center;
+    border: solid 1px grey;
+}
+
+.post-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+input {
+    width: 80%;
+    height: 30px;
+}
+
+.btn-primary {
+    color: black !important;
+    background-color: white !important;
+    border: none !important;
+}
