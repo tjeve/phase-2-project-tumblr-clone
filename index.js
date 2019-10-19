@@ -4,12 +4,13 @@ const app = express()
 const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
-// const bodyparser = require('body-parser')
-
+// const bodyParser = require('body-parser')
+app.use(express.json())
 const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
-// app.use(bodyparser)
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser)
 
-const port = 4000
+const port = 4000; 
 // --------------------------------------------------------------------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
@@ -52,6 +53,7 @@ app.get('/users', function (request, response, next) {
       response.status(500).send('No Users found')
     })
 })
+
 
 // POST new text post
 
@@ -102,9 +104,9 @@ function renderPosts (post) {
   return CreateAllPostsHTML.join('')
 }
 
-function createPost (post) {
-  console.log("~~~~~~~~~~", post)
-  return db.raw('INSERT INTO "Posts" (postedMessage) VALUES (?, ?)', [post.postedMessage])
+function createPost (postObject) {
+  console.log("~~~~~~~~~~", postObject)
+  return db.raw(`INSERT INTO "Posts" ("postedMessage") VALUES (?)`, [postObject.postedMessage])
 }
 
 function renderSuccessInfo () {
