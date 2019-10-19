@@ -7,26 +7,30 @@ const mustache = require('mustache')
 // const bodyParser = require('body-parser')
 app.use(express.json())
 app.use(express.urlencoded())
-const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
+// const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser)
 
-const port = 4000; 
+const port = 4000
 // --------------------------------------------------------------------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
-const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
+// const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
 
-
-app.use('/', express.static(__dirname + '/public'))
+app.use('/', express.static(__dirname, '/public'))
 
 app.get('/', function (req, res) {
   getAllThingsPosted() // The Promise
-    .then(function (allPosts) { // When the Promise is received
+    .then(function (allPosts) {
+      // When the Promise is received
       // console.log(allPosts.rows)
-      console.log("Your seed data should show up here") // console log this message
+      console.log('Your seed data should show up here') // console log this message
       // res.send(allPosts.rows) // then send back the rows full of data from your database
-      res.send(mustache.render(homepageTemplate, { postsHTML: renderPosts(allPosts.rows) })) // Mustache is working! But why is everything undefined?
+      res.send(
+        mustache.render(homepageTemplate, {
+          postsHTML: renderPosts(allPosts.rows)
+        })
+      ) // Mustache is working! But why is everything undefined?
       // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
       // res.send(allPosts.rows)
     })
@@ -34,7 +38,6 @@ app.get('/', function (req, res) {
       res.status(500).send('No Posts found')
     })
 })
-
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -53,22 +56,36 @@ app.get('/users', function (request, response, next) {
     })
 })
 
-
 // POST new text post
 
 app.post('/posts', function (req, res) {
- console.log(req.body, "this is req.body")
+  console.log(req.body, 'this is req.body')
   createPost(req.body)
-  .then(function () {
-    res.send(mustache.render(homepageTemplate, { postsHTML: renderPosts(allPosts.rows) }))
-    // res.send('hello world')
-  })
-  .catch(function () {
-    res.status(500).send('Not able to create new post')
-  })
+    .then(function () {
+      getAllThingsPosted() // The Promise
+        .then(function (allPosts) {
+          // When the Promise is received
+          // console.log(allPosts.rows)
+          console.log('Your seed data should show up here') // console log this message
+          // res.send(allPosts.rows) // then send back the rows full of data from your database
+          res.send(
+            mustache.render(homepageTemplate, {
+              postsHTML: renderPosts(allPosts.rows)
+            })
+          ) // Mustache is working! But why is everything undefined?
+          // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
+          // res.send(allPosts.rows)
+        })
+        .catch(function () {
+          res.status(500).send('No Posts found')
+        })
+      // res.send('hello world')
+    })
+    .catch(function (error) {
+      console.error(error)
+      res.status(500).send('Not able to create new post')
+    })
 })
-
-
 
 // --------------------------------------------------------------------------
 // database Queries and Functions
@@ -78,17 +95,17 @@ SELECT *
 FROM "Users"
 `
 
-  const getAllPostsQuery = `
-SELECT *
-FROM "Posts"
-`
+// const getAllPostsQuery = `
+// SELECT *
+// FROM "Posts"
+// `
 
 function getAllUsers () {
   return db.raw(getAllUsersQuery)
 }
 
-function getAllThingsPosted() {
-  return db.raw(`SELECT * FROM "Posts"`)
+function getAllThingsPosted () {
+  return db.raw('SELECT * FROM "Posts" order by "id" desc')
 }
 
 function renderPosts (post) {
@@ -101,20 +118,22 @@ function renderPosts (post) {
               <p>${postObject.postedMessage}</p>
             </div>`
   }
-  
-  let CreateAllPostsHTML = post.map(createSinglePostHTML)
+
+  const CreateAllPostsHTML = post.map(createSinglePostHTML)
 
   return CreateAllPostsHTML.join('')
 }
 
 function createPost (postObject) {
-  console.log("~~~~~~~~~~", postObject)
-  return db.raw(`INSERT INTO "Posts" ("postedMessage") VALUES (?)`, [postObject.postedMessage])
+  console.log('~~~~~~~~~~', postObject)
+  return db.raw('INSERT INTO "Posts" ("postedMessage") VALUES (?)', [
+    postObject.postedMessage
+  ])
 }
 
-function renderSuccessInfo () {
-  return `
-    <p>Yay u did it.</p>
-    <p><a href="/">Go Back to Homepage</a></p>
-  `
-}
+// function renderSuccessInfo () {
+//   return `
+//     <p>Yay u did it.</p>
+//     <p><a href="/">Go Back to Homepage</a></p>
+//   `
+// }
