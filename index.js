@@ -4,9 +4,10 @@ const app = express()
 const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
+const path = require('path')
 // const bodyParser = require('body-parser')
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 // const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser)
@@ -17,7 +18,7 @@ const port = 4000
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 // const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
 
-app.use('/', express.static(__dirname, '/public'))
+app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
   getAllThingsPosted() // The Promise
