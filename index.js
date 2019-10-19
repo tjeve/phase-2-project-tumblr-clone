@@ -4,18 +4,17 @@ const app = express()
 const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
-// const bodyParser = require('body-parser')
+
 app.use(express.json())
 app.use(express.urlencoded())
 const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser)
+
 
 const port = 4000; 
 // --------------------------------------------------------------------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
-const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
+// const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
 
 
 app.use('/', express.static(__dirname + '/public'))
@@ -43,7 +42,6 @@ app.listen(port, function () {
 // GET /users
 
 app.get('/users', function (request, response, next) {
-  // console.log('wuts disssss', request)
   getAllUsers()
     .then(function (allUsers) {
       response.send(allUsers.rows)
@@ -60,8 +58,13 @@ app.post('/posts', function (req, res) {
  console.log(req.body, "this is req.body")
   createPost(req.body)
   .then(function () {
-    res.send(mustache.render(homepageTemplate, { postsHTML: renderPosts(allPosts.rows) }))
-    // res.send('hello world')
+    getAllThingsPosted() 
+    .then(function (allPosts) { 
+      res.send(mustache.render(homepageTemplate, { postsHTML: renderPosts(allPosts.rows) })) 
+    })
+    .catch(function () {
+      res.status(500).send('No Posts found')
+    })
   })
   .catch(function () {
     res.status(500).send('Not able to create new post')
@@ -93,13 +96,34 @@ function getAllThingsPosted() {
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
-    return `<div>
-              <h1>${postObject.id}</h1>
-              <img src=${postObject.postedImage} height="600" width="400">
-              <div>${postObject.userId}</div>
-              <img src=${postObject.userImage} height="20" width="20">
-              <p>${postObject.postedMessage}</p>
-            </div>`
+    if (postObject.postedImage === null) {
+      return `
+      <div class="post-container">
+        <img src=${postObject.userImage} height="60" width="60"> 
+        
+        <div class="content-container">
+          <h2>${postObject.title}</h2>
+          ${postObject.postedMessage}
+          <div class="post-footer">
+            ${postObject.numberOfNotes} notes
+          </div>
+        </div>
+    
+      </div>
+      `
+    } else {
+      return `<div class="post-container">
+                <img class="user-img" src=${postObject.userImage} height="60" width="59">
+
+                <div class="img-post-container">
+                   <img class="posted-img" src=${postObject.postedImage} height="700" width="500">
+                   <div class="posted-message">${postObject.postedMessage}</div>
+                    <div class="post-footer">
+                      ${postObject.numberOfNotes} notes
+                    </div>
+                </div>
+              </div>`
+    }
   }
   
   let CreateAllPostsHTML = post.map(createSinglePostHTML)
@@ -108,8 +132,7 @@ function renderPosts (post) {
 }
 
 function createPost (postObject) {
-  console.log("~~~~~~~~~~", postObject)
-  return db.raw(`INSERT INTO "Posts" ("postedMessage") VALUES (?)`, [postObject.postedMessage])
+  return db.raw(`INSERT INTO "Posts" ("postedMessage", "title") VALUES (?, ?)`, [postObject.postedMessage, postObject.title])
 }
 
 function renderSuccessInfo () {

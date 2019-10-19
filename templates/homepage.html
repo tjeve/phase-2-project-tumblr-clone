@@ -38,7 +38,9 @@
     <!-- ===================FORM STARTS HERE ====================== -->
 
                         <form action="/posts" method="post" id="form1">
-                            <textarea name="postedMessage" rows="7" cols="50">
+                            <input type="text" name="title" placeholder="Title"/>
+                            <br>
+                            <textarea name="postedMessage" rows="5" cols="50">
                                Your text here
                                 </textarea>
                         
@@ -74,6 +76,11 @@
         </div>
 
     </div>
+
+<div class="dashboard-content">
     <main>{{{postsHTML}}}</main>
+    <div>Recomended blogsss</div>
+</div>
+
 </body>
 </html>
