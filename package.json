@@ -16,6 +16,8 @@
     "knex": "0.19.5",
     "mustache": "3.1.0",
     "nodemon": "1.19.3",
+    "passport": "0.4.0",
+    "passport-facebook": "^3.0.0",
     "pg": "7.12.1",
     "sqlite3": "4.1.0"
   },
