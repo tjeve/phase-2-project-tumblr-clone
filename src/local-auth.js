@@ -5,11 +5,19 @@ module.exports = function (app) {
   const fs = require('fs')
   const bcrypt = require('bcrypt')
   const saltRounds = 10
-  const myPlaintextPassword = 'tumblrrrr'
+  const textPassword = 'p3qbvkefashf4h2q'
   const { getAllUsers, insertNewUser } = require('./db/users.js')
+  const fileUpload = require('express-fileupload')
+  const imageDir = 'userImages/'
+  const uuidv4 = require('uuid/v4')
 
   app.use(passport.initialize())
   app.use(passport.session())
+  app.use(
+    fileUpload({
+      createParentPath: true
+    })
+  )
 
   const authTemplate = fs.readFileSync('./templates/auth.mustache', 'utf8')
   const registerTemplate = fs.readFileSync(
@@ -37,16 +45,40 @@ module.exports = function (app) {
   })
 
   app.post('/register', function (req, res) {
-    bcrypt
-      .hash(req.body.password, saltRounds)
-      .then(function (err, hash) {
-        const userObj = req.body
-        if (err) {
-          console.error(err)
-        }
-        userObj.password = hash
-        console.log(typeof hash)
-        console.log(userObj)
+    const userObj = req.body
+    // Save file
+    if (req.files) {
+      const image = req.files.userImage
+      const ext = image.name.split('.').pop()
+      const filename = uuidv4() + '.' + ext
+      userObj.userImage = imageDir + filename
+      fs.writeFile(userObj.userImage, image.data, function (err) {
+        if (err) console.error(err)
+        console.log('Imagefile was saved. ', image.name)
+      })
+    }
+
+    // Check Requirements
+    // TODO
+    if (!userObj.email) {
+      res.status(500).send('Email is missing!')
+    }
+
+    if (!userObj.name) {
+      res.status(500).send('User name is missing!')
+    }
+
+    // Update slug
+    userObj.slug = userObj.slug
+      ? userObj.slug.replace(/\s/g, '-')
+      : userObj.name.replace(/\s/g, '-').toLowerCase()
+
+    // Encrypt password and insert to Database
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      if (err) console.error(err)
+      bcrypt.hash(textPassword, salt, function (err, encrypted) {
+        if (err) console.error(err)
+        userObj.password = encrypted
         insertNewUser(userObj)
           .then(function () {
             res.redirect('/users')
@@ -56,10 +88,7 @@ module.exports = function (app) {
             res.send('error!')
           })
       })
-      .catch(function (err) {
-        console.error('Error on bcrypt!')
-        console.error(err)
-      })
+    })
   })
 
   app.get('/users', function (req, res) {

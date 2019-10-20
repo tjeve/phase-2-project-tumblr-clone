@@ -9,22 +9,27 @@
 </head>
 
 <body>
-    <form action="/register" method="post">
+    <h1>Sign Up Page</h1>
+    <form action="/register" method="post" enctype="multipart/form-data">
         <div>
             <label>Username:</label>
-            <input type="text" name="name" required/>
+            <input type="text" name="name" required />
         </div>
         <div>
-            <label>User Image URL:</label>
-            <input type="text" name="userImage" />
+            <label>User Image:</label>
+            <input type="file" name="userImage" />
         </div>
         <div>
             <label>Slug:</label>
             <input type="text" name="slug" />
         </div>
         <div>
+            <label>Email:</label>
+            <input type="email" name="email" required />
+        </div>
+        <div>
             <label>Password:</label>
-            <input type="password" name="password" required/>
+            <input type="password" name="password" required />
         </div>
         <button type="submit">Submit!</button>
     </form>
