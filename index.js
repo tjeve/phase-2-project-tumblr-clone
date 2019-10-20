@@ -5,6 +5,40 @@ const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 // const bodyParser = require('body-parser')
+
+// ========== Facebook OAuth ==========
+const passport = require('passport')
+ , FacebookStrategy = require('passport-facebook').Strategy
+ passport.use(new FacebookStrategy ({
+   clientID: 714303202382978,
+   clientSecret: "d73be09f0889564f3ed3c19017e32249",
+   callbackURL: "http://localhost:4000/auth/facebook/callback"
+ },
+ function (accessToken, refereshToken, profile, cb) {
+   return cb(null, profile)
+ }
+
+//  function (accessToken, refereshToken, profile, cb) {
+//    User.findOrCreate({ facebookId: profile.id }, function(err, user) {
+//      if (err) { return cb (err); }
+//      cb (null, user)
+//    })
+//  }
+//  return cb (null, profile)
+ ))
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
+app.use(passport.initialize())
+app.use(passport.session())
+// ============= END ===============
+
 app.use(express.json())
 app.use(express.urlencoded())
 const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/posts.js')
@@ -12,16 +46,30 @@ const {getAllPosts, getOnePost, getAllPostsFromOneUser } = require('./src/db/pos
 // app.use(bodyParser)
 
 const port = 4000; 
-// --------------------------------------------------------------------------
+// -----------------------------------------------------------d---------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
 
 
+        // ========== Passport-facebook routes ==========
+app.get('/auth/facebook',
+  passport.authenticate('facebook')
+)
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/')
+  });
+
+          // ================= END ======================
 app.use('/', express.static(__dirname + '/public'))
 
 app.get('/', function (req, res) {
-  getAllThingsPosted() // The Promise
+  getAllItemsPosted() 
+  // The Promise
     .then(function (allPosts) { // When the Promise is received
       // console.log(allPosts.rows)
       console.log("Your seed data should show up here") // console log this message
@@ -34,7 +82,6 @@ app.get('/', function (req, res) {
       res.status(500).send('No Posts found')
     })
 })
-
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -77,11 +124,14 @@ const getAllUsersQuery = `
 SELECT *
 FROM "Users"
 `
-
-  const getAllPostsQuery = `
+const getAllPostsQuery = `
 SELECT *
 FROM "Posts"
 `
+
+function getAllItemsPosted () {
+  return db.raw('SELECT * FROM "Posts"')
+}
 
 function getAllUsers () {
   return db.raw(getAllUsersQuery)
@@ -92,7 +142,7 @@ function getAllThingsPosted() {
 }
 
 function renderPosts (post) {
-  function createSinglePostHTML (postObject) {
+  function createSinglePostHTML (postObject) { // you will NEED to change the href for the image in the html code below once it is written.
     return `<div>
               <h1>${postObject.id}</h1>
               <img src=${postObject.postedImage} height="600" width="400">
@@ -101,8 +151,8 @@ function renderPosts (post) {
               <p>${postObject.postedMessage}</p>
             </div>`
   }
-  
-  let CreateAllPostsHTML = post.map(createSinglePostHTML)
+
+  const CreateAllPostsHTML = post.map(createSinglePostHTML)
 
   return CreateAllPostsHTML.join('')
 }
