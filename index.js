@@ -6,8 +6,6 @@ const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 const path = require('path')
 
-// const bodyParser = require('body-parser')
-
 // ========== Facebook OAuth ==========
 const passport = require('passport')
 
@@ -95,18 +93,21 @@ app.get('/', function (req, res) {
     })
 })
 
-//GET Recommended posts
+// GET Recommended posts
 
 app.get('/', function (req, res) {
   getAllUsers()
-    .then(function (allUsers) { 
-      res.send(mustache.render(homepageTemplate, { recommendedHTML: renderRecommendedUsers(allUsers.rows) }))
+    .then(function (allUsers) {
+      res.send(
+        mustache.render(homepageTemplate, {
+          recommendedHTML: renderRecommendedUsers(allUsers.rows)
+        })
+      )
     })
     .catch(function () {
       res.status(500).send('No Users found')
     })
 })
-
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -169,7 +170,7 @@ function getAllUsers () {
 }
 
 function getAllThingsPosted () {
-  return db.raw('SELECT * FROM "Posts"')
+  return db.raw('SELECT * FROM "Posts" order by "id" desc')
 }
 
 function renderPosts (post) {
@@ -221,16 +222,15 @@ function createPost (postObject) {
 }
 
 function renderRecommendedUsers (user) {
-  function createSingleRecommendation (userObject) {
-    return `
-    <div>
-      <img class="recommended-user-img" src=${usereObject.userImage} height="60" width="59">
-      <h2 class="username">${userObject.name}</h2>
-      <p class="tagline">${userObject.tagline}</p>
-    </div>
-  `
-  }
-
-
+  // function createSingleRecommendation (userObject) {
+  //   return `
+  //   <div>
+  //     <img class="recommended-user-img" src=${userObject.userImage} height="60" width="59">
+  //     <h2 class="username">${userObject.name}</h2>
+  //     <p class="tagline">${userObject.tagline}</p>
+  //   </div>
+  // `
+  // }
 }
 
+require('./src/local-auth.js')(app)
