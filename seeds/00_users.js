@@ -8,42 +8,50 @@ exports.seed = function (knex) {
         {
           name: 'ShirleyHopkins',
           userImage: 'http://placehold.it/0',
-          slug: 'ShirleyHopkins'
+          slug: 'ShirleyHopkins',
+          tagline: 'Insert witty tagline here!'
         },
         {
           name: 'ShariPope',
           userImage: 'http://placehold.it/1/32x32',
-          slug: 'ShariPope'
+          slug: 'ShariPope',
+          tagline: 'Insert witty tagline here!'
         },
         {
           name: 'HelenaBoyd',
           userImage: 'http://placehold.it/2/32x32',
-          slug: 'HelenaBoyd'
+          slug: 'HelenaBoyd',
+          tagline: 'Insert witty tagline here!'
         },
         {
           name: 'YoungCherry',
           userImage: 'http://placehold.it/3/32x32',
-          slug: 'YoungCherry'
+          slug: 'YoungCherry',
+          tagline: 'Insert witty tagline here!'
         },
         {
           name: 'WheelerVega',
           userImage: 'http://placehold.it/4/32x32',
-          slug: 'WheelerVega'
+          slug: 'WheelerVega',
+          tagline: 'Insert witty tagline here!'
         },
         {
           name: 'GloriaNixon',
           userImage: 'http://placehold.it/5/32x32',
-          slug: 'GloriaNixon'
+          slug: 'GloriaNixon',
+          tagline: 'Insert witty tagline here!'
         },
         {
           name: 'NitaParks',
           userImage: 'http://placehold.it/6/32x32',
-          slug: 'NitaParks'
+          slug: 'NitaParks',
+          tagline: 'Insert witty tagline here!'
         },
         {
           name: 'MavisDale',
           userImage: 'http://placehold.it/7/32x32',
-          slug: 'MavisDale'
+          slug: 'MavisDale',
+          tagline: 'Insert witty tagline here!'
         }
       ])
     })
