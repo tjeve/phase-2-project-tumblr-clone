@@ -44,7 +44,7 @@ app.use(passport.session())
 // ============= END ===============
 
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 // const {
 //   getAllPosts,
 //   getOnePost,

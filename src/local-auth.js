@@ -1,44 +1,90 @@
 module.exports = function (app) {
   const passport = require('passport')
-  const LocalStrategy = require('passport-local').Strategy
   const mustache = require('mustache')
   const fs = require('fs')
   const bcrypt = require('bcrypt')
   const saltRounds = 10
-  const textPassword = 'p3qbvkefashf4h2q'
+  // const textPassword = 'p3qbvkefashf4h2q'
   const { getAllUsers, insertNewUser } = require('./db/users.js')
   const fileUpload = require('express-fileupload')
   const imageDir = 'userImages/'
   const uuidv4 = require('uuid/v4')
+  const { getOneUser } = require('./db/users')
 
-  app.use(passport.initialize())
-  app.use(passport.session())
   app.use(
     fileUpload({
       createParentPath: true
     })
   )
 
-  const authTemplate = fs.readFileSync('./templates/auth.mustache', 'utf8')
+  const authTemplate = fs.readFileSync(
+    './templates/local-auth.mustache',
+    'utf8'
+  )
   const registerTemplate = fs.readFileSync(
     './templates/register.mustache',
     'utf8'
   )
 
-  passport.use(new LocalStrategy(function (username, password, done) {}))
+  app.use(passport.initialize())
+  app.use(passport.session())
 
-  app.get('/auth', function (req, res) {
+  passport.serializeUser(function (user, cb) {
+    console.log('this is serializeuser....')
+
+    cb(null, user.id)
+  })
+
+  passport.deserializeUser(function (id, cb) {
+    console.log('this is deserializeuser....')
+    // User.findById(id, function (err, user) {
+    //   cb(err, user)
+    // })
+  })
+
+  const LocalStrategy = require('passport-local').Strategy
+
+  passport.use(
+    new LocalStrategy(function (username, password, done) {
+      getOneUser({ email: username })
+        .then(function (userArray) {
+          if (userArray.length === 0) {
+            // console.error('User is not found')
+            return done('User is not found!!!')
+          } else {
+            const user = userArray[0]
+            bcrypt.compare(password, user.password, function (
+              err,
+              authResponse
+            ) {
+              if (err) console.error(err)
+              if (authResponse) {
+                return done(null, user)
+              } else {
+                return done('User validation failed', user.email)
+              }
+            })
+            console.log(user)
+          }
+        })
+        .catch(function (err) {
+          console.error('Error on database')
+          return done(err)
+        })
+    })
+  )
+
+  app.get('/auth/local', function (req, res) {
     res.send(mustache.render(authTemplate))
   })
 
-  app.post('/auth', function (req, res) {
-    passport.authenticate('local', { failureRedirect: '/auth-error' }, function (
-      req,
-      res
-    ) {
-      res.redirect('/')
-    })
-  })
+  app.post(
+    '/auth/local',
+    passport.authenticate('local', { failureRedirect: '/auth/local-error' }),
+    function (req, res) {
+      res.redirect('/auth/local-success?username=' + req.user.name)
+    }
+  )
 
   app.get('/register', function (req, res) {
     res.send(mustache.render(registerTemplate))
@@ -59,7 +105,6 @@ module.exports = function (app) {
     }
 
     // Check Requirements
-    // TODO
     if (!userObj.email) {
       res.status(500).send('Email is missing!')
     }
@@ -76,7 +121,7 @@ module.exports = function (app) {
     // Encrypt password and insert to Database
     bcrypt.genSalt(saltRounds, function (err, salt) {
       if (err) console.error(err)
-      bcrypt.hash(textPassword, salt, function (err, encrypted) {
+      bcrypt.hash(userObj.password, salt, function (err, encrypted) {
         if (err) console.error(err)
         userObj.password = encrypted
         insertNewUser(userObj)
@@ -102,18 +147,10 @@ module.exports = function (app) {
       })
   })
 
-  app.get('/auth-success', function (req, res) {
+  app.get('/auth/local-success', function (req, res) {
     res.send('Welcome ' + req.query.username + '!!')
   })
-  app.get('/auth-error', function (req, res) {
+  app.get('/auth/local-error', function (req, res) {
     res.send('error logging in')
-  })
-
-  passport.serializeUser(function (user, cb) {
-    cb(null, user.id)
-  })
-
-  passport.deserializeUser(function (id, cb) {
-    cb(null, null)
   })
 }
