@@ -95,6 +95,19 @@ app.get('/', function (req, res) {
     })
 })
 
+//GET Recommended posts
+
+app.get('/', function (req, res) {
+  getAllUsers()
+    .then(function (allUsers) { 
+      res.send(mustache.render(homepageTemplate, { recommendedHTML: renderRecommendedUsers(allUsers.rows) }))
+    })
+    .catch(function () {
+      res.status(500).send('No Users found')
+    })
+})
+
+
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
 })
@@ -104,6 +117,7 @@ app.listen(port, function () {
 app.get('/users', function (request, response, next) {
   getAllUsers()
     .then(function (allUsers) {
+      console.log('get user info', allUsers.rows)
       response.send(allUsers.rows)
     })
     .catch(function () {
@@ -206,9 +220,17 @@ function createPost (postObject) {
   )
 }
 
-// function renderSuccessInfo () {
-//   return `
-//     <p>Yay u did it.</p>
-//     <p><a href="/">Go Back to Homepage</a></p>
-//   `
-// }
+function renderRecommendedUsers (user) {
+  function createSingleRecommendation (userObject) {
+    return `
+    <div>
+      <img class="recommended-user-img" src=${usereObject.userImage} height="60" width="59">
+      <h2 class="username">${userObject.name}</h2>
+      <p class="tagline">${userObject.tagline}</p>
+    </div>
+  `
+  }
+
+
+}
+
