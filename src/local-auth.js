@@ -4,7 +4,6 @@ module.exports = function (app) {
   const fs = require('fs')
   const bcrypt = require('bcrypt')
   const saltRounds = 10
-  // const textPassword = 'p3qbvkefashf4h2q'
   const { getAllUsers, insertNewUser } = require('./db/users.js')
   const fileUpload = require('express-fileupload')
   const imageDir = 'userImages/'
@@ -31,8 +30,8 @@ module.exports = function (app) {
 
   passport.serializeUser(function (user, cb) {
     console.log('this is serializeuser....')
-
-    cb(null, user.id)
+    // console.log(user)
+    cb(null, user.email)
   })
 
   passport.deserializeUser(function (id, cb) {
@@ -64,7 +63,7 @@ module.exports = function (app) {
                 return done('User validation failed', user.email)
               }
             })
-            console.log(user)
+            // console.log(user)
           }
         })
         .catch(function (err) {
@@ -148,6 +147,7 @@ module.exports = function (app) {
   })
 
   app.get('/auth/local-success', function (req, res) {
+    console.log('user information >>>>', req.user)
     res.send('Welcome ' + req.query.username + '!!')
   })
   app.get('/auth/local-error', function (req, res) {
