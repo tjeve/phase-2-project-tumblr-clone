@@ -6,7 +6,7 @@ exports.seed = function (knex) {
       // Inserts seed entries
       return knex('Posts').insert([
         {
-          userId: 0,
+          userId: 1,
           title: 'Insert title here',
           postedImage: 'https://www.dw.com/image/40320815_303.jpg',
           numberOfNotes: 34,

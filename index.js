@@ -6,6 +6,16 @@ const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 const path = require('path')
 
+// ========== Express Session ==========
+const session = require('express-session')
+app.use(
+  session({
+    secret: 'p3qbvkefashf4h2q',
+    resave: false,
+    saveUninitialized: false
+  })
+)
+
 // ========== Facebook OAuth ==========
 const passport = require('passport')
 
@@ -44,7 +54,7 @@ app.use(passport.session())
 // ============= END ===============
 
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 // const {
 //   getAllPosts,
 //   getOnePost,
