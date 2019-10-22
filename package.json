@@ -22,10 +22,10 @@
     "passport-facebook": "^3.0.0",
     "passport-local": "^1.0.0",
     "pg": "7.12.1",
-    "sqlite3": "4.1.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "standard": "^14.3.1"
+    "standard": "^14.3.1",
+    "sqlite3": "4.1.0"
   }
 }
