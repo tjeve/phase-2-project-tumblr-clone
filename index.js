@@ -105,7 +105,7 @@ app.get('/', function (req, res) {
       )
     })
     .catch(function () {
-      res.status(500).send('No Users found')
+      res.status(500).send('No recommendations found')
     })
 })
 
@@ -144,10 +144,31 @@ app.post('/posts', function (req, res) {
           res.status(500).send('No Posts found')
         })
     })
-    .catch(function () {
-      res.status(500).send('Not able to create new post')
-    })
 })
+
+
+// POST new quote post
+
+// app.post('/quotes', function (req, res) {
+//   console.log(req.body, 'this is req.body')
+//   createQuotePost(req.body)
+//     .then(function () {
+//       getAllThingsPosted()
+//         .then(function (quotes) {
+//           res.send(
+//             mustache.render(homepageTemplate, {
+//               postsHTML: renderPosts(allPosts.rows)
+//             })
+//           )
+//         })
+//     })
+//     .catch(function () {
+//       res.status(500).send('Not able to create new quote post')
+//     })
+// })
+
+
+
 
 // --------------------------------------------------------------------------
 // database Queries and Functions
@@ -190,7 +211,24 @@ function renderPosts (post) {
     
       </div>
       `
-    } else {
+    } else if (postObject.quote !== null) {
+      return `
+      <div class="post-container">
+        <img src=${postObject.userImage} height="60" width="60"> 
+        
+        <div class="content-container">
+          <h2>${postObject.quote}</h2>
+          ${postObject.source}
+          <div class="post-footer">
+            ${postObject.numberOfNotes} notes
+          </div>
+        </div>
+    
+      </div>
+      `
+    }
+    
+    else {
       return `<div class="post-container">
                 <img class="user-img" src=${
   postObject.userImage
@@ -222,15 +260,18 @@ function createPost (postObject) {
 }
 
 function renderRecommendedUsers (user) {
-  // function createSingleRecommendation (userObject) {
-  //   return `
-  //   <div>
-  //     <img class="recommended-user-img" src=${userObject.userImage} height="60" width="59">
-  //     <h2 class="username">${userObject.name}</h2>
-  //     <p class="tagline">${userObject.tagline}</p>
-  //   </div>
-  // `
-  // }
+  function createSingleRecommendation (userObject) {
+    return `
+    <div>
+      <img class="recommended-user-img" src=${userObject.userImage} height="60" width="59">
+      <h2 class="username">${userObject.name}</h2>
+      <p class="tagline">${userObject.tagline}</p>
+    </div>
+  `
+  }
+  const createRecommendationsHTML = post.map(createSingleRecommendation)
+
+  return createRecommendationsHTML.join('')
 }
 
 require('./src/local-auth.js')(app)
