@@ -6,52 +6,52 @@ exports.seed = function (knex) {
       // Inserts seed entries
       return knex('Users').insert([
         {
-          id: 0,
           name: 'ShirleyHopkins',
           userImage: 'http://placehold.it/0',
-          slug: 'ShirleyHopkins'
+          slug: 'ShirleyHopkins',
+          tagline: 'Insert witty tagline here!'
         },
         {
-          id: 1,
           name: 'ShariPope',
           userImage: 'http://placehold.it/1/32x32',
-          slug: 'ShariPope'
+          slug: 'ShariPope',
+          tagline: 'Insert witty tagline here!'
         },
         {
-          id: 2,
           name: 'HelenaBoyd',
           userImage: 'http://placehold.it/2/32x32',
-          slug: 'HelenaBoyd'
+          slug: 'HelenaBoyd',
+          tagline: 'Insert witty tagline here!'
         },
         {
-          id: 3,
           name: 'YoungCherry',
           userImage: 'http://placehold.it/3/32x32',
-          slug: 'YoungCherry'
+          slug: 'YoungCherry',
+          tagline: 'Insert witty tagline here!'
         },
         {
-          id: 4,
           name: 'WheelerVega',
           userImage: 'http://placehold.it/4/32x32',
-          slug: 'WheelerVega'
+          slug: 'WheelerVega',
+          tagline: 'Insert witty tagline here!'
         },
         {
-          id: 5,
           name: 'GloriaNixon',
           userImage: 'http://placehold.it/5/32x32',
-          slug: 'GloriaNixon'
+          slug: 'GloriaNixon',
+          tagline: 'Insert witty tagline here!'
         },
         {
-          id: 6,
           name: 'NitaParks',
           userImage: 'http://placehold.it/6/32x32',
-          slug: 'NitaParks'
+          slug: 'NitaParks',
+          tagline: 'Insert witty tagline here!'
         },
         {
-          id: 7,
           name: 'MavisDale',
           userImage: 'http://placehold.it/7/32x32',
-          slug: 'MavisDale'
+          slug: 'MavisDale',
+          tagline: 'Insert witty tagline here!'
         }
       ])
     })
