@@ -172,7 +172,7 @@ FROM "Users"
 // `
 
 function getAllItemsPosted () {
-  return db.raw('SELECT * FROM "Posts"')
+  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
 }
 
 function getAllUsers () {
@@ -180,15 +180,16 @@ function getAllUsers () {
 }
 
 function getAllThingsPosted () {
-  return db.raw('SELECT * FROM "Posts" order by "id" desc')
+  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
 }
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
+    console.log(postObject)
     if (postObject.postedImage === null) {
       return `
       <div class="post-container">
-        <img src=${postObject.userImage} height="60" width="60"> 
+        <img src=${postObject.userImage}> 
         
         <div class="content-container">
           <h2>${postObject.title}</h2>
@@ -209,7 +210,7 @@ function renderPosts (post) {
                 <div class="img-post-container">
                    <img class="posted-img" src=${
   postObject.postedImage
-} height="700" width="500">
+} width="500">
                    <div class="posted-message">${postObject.postedMessage}</div>
                     <div class="post-footer">
                       ${postObject.numberOfNotes} notes
