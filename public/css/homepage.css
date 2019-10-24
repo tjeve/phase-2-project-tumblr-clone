@@ -115,4 +115,8 @@ input[type=text], select {
 
   } */
 
-  
+.navbar-default {
+    background-color: #001936;
+    background-image: none;
+    background-repeat: no-repeat;
+   }

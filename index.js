@@ -5,6 +5,7 @@ const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 const path = require('path')
+const bodyParser = require('body-parser')
 
 // ========== Facebook OAuth ==========
 const passport = require('passport')
@@ -42,6 +43,8 @@ passport.deserializeUser(function (obj, cb) {
 app.use(passport.initialize())
 app.use(passport.session())
 // ============= END ===============
+
+app.use(bodyParser.json())
 
 app.use(express.json())
 app.use(express.urlencoded())
@@ -149,6 +152,20 @@ app.post('/posts', function (req, res) {
     })
 })
 
+// Get Searched For Content
+
+app.get('/search', function (req, res) {
+  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for. 
+  // getSearchedForContent(req.query.search)
+  getSearchedForContent(req.query.search)
+    .then(function () {
+      res.send()
+    })
+  res.send('got' + JSON.stringify(req.query.search) ) // sends what is entered in the search bar on the homepage to the screen.
+
+
+})
+
 // --------------------------------------------------------------------------
 // database Queries and Functions
 
@@ -234,3 +251,12 @@ function renderRecommendedUsers (user) {
 }
 
 require('./src/local-auth.js')(app)
+
+// Search Function
+
+function getSearchedForContent (searchedString) {
+  return db.raw(
+    'SELECT * FROM "Posts" WHERE "postedMessage" = ?',
+    [searchedString]
+  )
+}
