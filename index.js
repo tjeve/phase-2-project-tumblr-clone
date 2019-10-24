@@ -16,43 +16,6 @@ app.use(
   })
 )
 
-// ========== Facebook OAuth ==========
-const passport = require('passport')
-
-const FacebookStrategy = require('passport-facebook').Strategy
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: 714303202382978,
-      clientSecret: 'd73be09f0889564f3ed3c19017e32249',
-      callbackURL: 'http://localhost:4000/auth/facebook/callback'
-    },
-    function (accessToken, refereshToken, profile, cb) {
-      return cb(null, profile)
-    }
-
-    //  function (accessToken, refereshToken, profile, cb) {
-    //    User.findOrCreate({ facebookId: profile.id }, function(err, user) {
-    //      if (err) { return cb (err); }
-    //      cb (null, user)
-    //    })
-    //  }
-    //  return cb (null, profile)
-  )
-)
-
-passport.serializeUser(function (user, cb) {
-  cb(null, user)
-})
-
-passport.deserializeUser(function (obj, cb) {
-  cb(null, obj)
-})
-
-app.use(passport.initialize())
-app.use(passport.session())
-// ============= END ===============
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 // const {
@@ -67,19 +30,6 @@ const port = 4000
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 // const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
 
-// ========== Passport-facebook routes ==========
-app.get('/auth/facebook', passport.authenticate('facebook'))
-
-app.get(
-  '/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/')
-  }
-)
-
-// ================= END ======================
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
@@ -172,7 +122,9 @@ FROM "Users"
 // `
 
 function getAllItemsPosted () {
-  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
+  return db.raw(
+    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc'
+  )
 }
 
 function getAllUsers () {
@@ -180,7 +132,9 @@ function getAllUsers () {
 }
 
 function getAllThingsPosted () {
-  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
+  return db.raw(
+    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc'
+  )
 }
 
 function renderPosts (post) {
@@ -244,4 +198,6 @@ function renderRecommendedUsers (user) {
   // }
 }
 
-require('./src/local-auth.js')(app)
+require('./src/auth-local.js')(app)
+require('./src/auth-facebook.js')(app)
+require('./src/auth.js')(app)
