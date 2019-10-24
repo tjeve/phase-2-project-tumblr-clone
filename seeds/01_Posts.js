@@ -22,6 +22,7 @@ exports.seed = function (knex) {
     .del()
     .then(function () {
       // Inserts seed entries
+
       return knex('Posts').insert(fakeData)
     //   return knex('Posts').insert([
     //     {
