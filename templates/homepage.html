@@ -28,7 +28,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Text Post</h5>
+                     
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -41,7 +41,7 @@
                             <input type="text" name="title" placeholder="Title"/>
                             <br>
                             <textarea name="postedMessage" rows="5" cols="50">
-                               Your text here
+                               Your text hereee
                                 </textarea>
                         
                           </form>
@@ -56,12 +56,74 @@
               </div>
 
         </div>
-        <div class="icon-container">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#photoModal">
             PHOTO
-        </div>
-        <div class="icon-container">
+        </button>
+        <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+             
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+    <!-- ===================FORM STARTS HERE ====================== -->
+
+    <form action="images/photo.png" onchange="previewFile()" >
+        Select image to upload: <br>
+        <input type="file" name="file" id="file" value><br>
+        <label for="file"> Select a file to upload</label><br>
+        <input type="submit" value="Submit">
+      </form>
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" form="form3">Post</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#quoteModal">
             QUOTE
-        </div>
+        </button>
+        <div class="modal fade" id="quoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                  
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+    <!-- ===================FORM STARTS HERE ====================== -->
+
+                        <form action="/quotes" method="post" id="form2">
+                            <input type="text" name="quote" placeholder='"Quote"'/>
+                            <br>
+                            <textarea name="source" rows="5" cols="50">
+                               -Source
+                                </textarea>
+                        
+                          </form>
+                        
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" form="form2">Post</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
         <div class="icon-container">
             LINK
         </div>
@@ -72,7 +134,7 @@
            AUDIO
         </div>
         <div class="icon-container">
-            VIDEOloca
+            VIDEO
         </div>
     </div>
 
@@ -80,7 +142,7 @@
     <main>{{{postsHTML}}}</main>
     <div class="recommended-blogs-container">
         <h4>Recommended blogs</h4>
-        <section>{{{recommendedHTML}}}</section>
+        <section>{{{ recommendedHTML }}}</section>
     </div>
 </div>
     <!-- ===================== Facebook OAuth Strategy=====================-->
