@@ -86,15 +86,31 @@ app.get('/', function (req, res) {
   getAllItemsPosted()
     // The Promise
     .then(function (allPosts) {
+      // console.log(allPosts)
       // When the Promise is received
       // console.log(allPosts.rows)
       console.log('Your seed data should show up here') // console log this message
       // res.send(allPosts.rows) // then send back the rows full of data from your database
-      res.send(
-        mustache.render(homepageTemplate, {
-          postsHTML: renderPosts(allPosts.rows)
+
+      getAllUsers()
+        .then(function (allUsers) {
+
+          res.send(
+            mustache.render(homepageTemplate, {
+              postsHTML: renderPosts(allPosts.rows),
+              recommendedHTML: renderRecommendedUsers(allUsers.rows)
+            })
+          ) 
+
+          // res.redirect('/')
+          // res.send(
+          //   mustache.render(homepageTemplate, {
+          //     recommendedHTML: renderRecommendedUsers(allUsers.rows)
+          //   })       
+          
         })
-      ) // Mustache is working! But why is everything undefined?
+   
+        // Mustache is working! But why is everything undefined?
       // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
       // res.send(allPosts.rows)
     })
@@ -105,13 +121,15 @@ app.get('/', function (req, res) {
 
 // GET Recommended posts
 
-app.get('/', function (req, res) {
+app.get('/recommendedposts', function (req, res) {
+  console.log('helllo')
   getAllUsers()
     .then(function (allUsers) {
+      // res.redirect('/')
       res.send(
         mustache.render(homepageTemplate, {
           recommendedHTML: renderRecommendedUsers(allUsers.rows)
-        })
+        })       
       )
     })
     .catch(function () {
@@ -125,30 +143,25 @@ app.listen(port, function () {
 
 // GET /users
 
-app.get('/users', function (request, response, next) {
-  getAllUsers()
-    .then(function (allUsers) {
-      console.log('get user info', allUsers.rows)
-      response.send(allUsers.rows)
-    })
-    .catch(function () {
-      response.status(500).send('No Users found')
-    })
-})
+// app.get('/users', function (request, response, next) {
+//   getAllUsers()
+//     .then(function (allUsers) {
+//       console.log('#######', allUsers.rows)
+//       response.send(allUsers.rows)
+//     })
+//     .catch(function () {
+//       response.status(500).send('No Users found')
+//     })
+// })
 
 // POST new text post
 
 app.post('/posts', function (req, res) {
-  console.log(req.body, 'this is req.body')
   createPost(req.body)
     .then(function () {
       getAllThingsPosted()
         .then(function (allPosts) {
-          res.send(
-            mustache.render(homepageTemplate, {
-              postsHTML: renderPosts(allPosts.rows)
-            })
-          )
+          res.redirect('/')
         })
         .catch(function () {
           res.status(500).send('No Posts found')
@@ -159,23 +172,21 @@ app.post('/posts', function (req, res) {
 
 // POST new quote post
 
-// app.post('/quotes', function (req, res) {
-//   console.log(req.body, 'this is req.body')
-//   createQuotePost(req.body)
-//     .then(function () {
-//       getAllThingsPosted()
-//         .then(function (quotes) {
-//           res.send(
-//             mustache.render(homepageTemplate, {
-//               postsHTML: renderPosts(allPosts.rows)
-//             })
-//           )
-//         })
-//     })
-//     .catch(function () {
-//       res.status(500).send('Not able to create new quote post')
-//     })
-// })
+app.post('/quotes', function (req, res) {
+  createQuotePost(req.body)
+    .then(function () {
+      getAllThingsPosted()
+        .then(function (allPosts) {
+          res.send(
+            mustache.render(homepageTemplate, {
+              postsHTML: renderPosts(allPosts.rows),
+            })) 
+        })
+    })
+    .catch(function () {
+      res.status(500).send('Not able to create new quote post')
+    })
+})
 
 
 
@@ -204,28 +215,29 @@ function getAllThingsPosted () {
   return db.raw('SELECT * FROM "Posts" order by "id" desc')
 }
 
+function getRecommendedPosts () {
+  return db.raw('SELECT TOP 5 * FROM "USERS" ORDER BY newid()')
+}
+
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
-    if (postObject.postedImage === null) {
+    if (postObject.postedImage !== null) {
       return `
       <div class="post-container">
-        <img src=${postObject.userImage} height="60" width="60"> 
-        
-        <div class="content-container">
-          <h2>${postObject.title}</h2>
-          ${postObject.postedMessage}
+        <img class="user-img" src= ${postObject.userImage} height="60" width="59">
+
+        <div class="img-post-container">
+          <img class="posted-img" src= ${postObject.postedImage} height="700" width="500">
+          <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
-            ${postObject.numberOfNotes} notes
+             ${postObject.numberOfNotes} notes
           </div>
         </div>
-    
-      </div>
-      `
+      </div>`
     } else if (postObject.quote !== null) {
       return `
       <div class="post-container">
-        <img src=${postObject.userImage} height="60" width="60"> 
-        
+        <img src=${postObject.userImage} height="60" width="60">
         <div class="content-container">
           <h2>${postObject.quote}</h2>
           ${postObject.source}
@@ -233,29 +245,23 @@ function renderPosts (post) {
             ${postObject.numberOfNotes} notes
           </div>
         </div>
-    
       </div>
       `
-    }
-    
-    else {
-      return `<div class="post-container">
-                <img class="user-img" src=${
-  postObject.userImage
-} height="60" width="59">
-
-                <div class="img-post-container">
-                   <img class="posted-img" src=${
-  postObject.postedImage
-} height="700" width="500">
-                   <div class="posted-message">${postObject.postedMessage}</div>
-                    <div class="post-footer">
-                      ${postObject.numberOfNotes} notes
-                    </div>
-                </div>
-              </div>`
-    }
+    } else {
+      return `
+      <div class="post-container">
+        <img src=${postObject.userImage} height="60" width="60">
+        <div class="content-container">
+          <h2>${postObject.title}</h2>
+          ${postObject.postedMessage}
+          <div class="post-footer">
+            ${postObject.numberOfNotes} notes
+          </div>
+        </div>
+      </div>
+      `
   }
+}
 
   const CreateAllPostsHTML = post.map(createSinglePostHTML)
 
@@ -269,8 +275,18 @@ function createPost (postObject) {
   )
 }
 
+function createQuotePost (postObject) {
+  return db.raw(
+    'INSERT INTO "Posts" ("quote", "source") VALUES (?, ?)',
+    [postObject.quote, postObject.source]
+  )
+}
+
+// console.log('sup')
 function renderRecommendedUsers (user) {
+  console.log('sup')
   function createSingleRecommendation (userObject) {
+   
     return `
     <div>
       <img class="recommended-user-img" src=${userObject.userImage} height="60" width="59">
@@ -279,9 +295,11 @@ function renderRecommendedUsers (user) {
     </div>
   `
   }
-  const createRecommendationsHTML = post.map(createSingleRecommendation)
+  const createRecommendationsHTML = user.map(createSingleRecommendation)
 
   return createRecommendationsHTML.join('')
 }
+
+
 
 require('./src/local-auth.js')(app)
