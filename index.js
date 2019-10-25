@@ -5,17 +5,24 @@ const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 const path = require('path')
-const bodyParser = require('body-parser')
+
+// ========== Express Session ==========
+const session = require('express-session')
+app.use(
+  session({
+    secret: 'p3qbvkefashf4h2q',
+    resave: false,
+    saveUninitialized: false
+  })
+)
 
 // ========== Setup Passport ==========
 const passport = require('passport')
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(bodyParser.json())
-
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 // const {
 //   getAllPosts,
 //   getOnePost,
@@ -31,7 +38,6 @@ const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
-
   console.log('user information >>> ', req.user)
   if (!req.user) {
     res.redirect('/auth')
@@ -51,7 +57,7 @@ app.get('/', function (req, res) {
               postsHTML: renderPosts(allPosts.rows),
               recommendedHTML: renderRecommendedUsers(allUsers.rows)
             })
-          )     
+          )
         })
 
         // Mustache is working! But why is everything undefined?
@@ -66,19 +72,19 @@ app.get('/', function (req, res) {
 
 // GET Recommended posts
 
-app.get('/', function (req, res) {
-  getAllUsers()
-    .then(function (allUsers) {
-      res.send(
-        mustache.render(homepageTemplate, {
-          recommendedHTML: renderRecommendedUsers(allUsers.rows)
-        })
-      )
-    })
-    .catch(function () {
-      res.status(500).send('No Users found')
-    })
-})
+// app.get('/', function (req, res) {
+//   getAllUsers()
+//     .then(function (allUsers) {
+//       res.send(
+//         mustache.render(homepageTemplate, {
+//           recommendedHTML: renderRecommendedUsers(allUsers.rows)
+//         })
+//       )
+//     })
+//     .catch(function () {
+//       res.status(500).send('No Users found')
+//     })
+// })
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -123,14 +129,12 @@ app.post('/posts', function (req, res) {
 // Get Searched For Content
 
 app.get('/search', function (req, res) {
-  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for. 
+  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for.
   // getSearchedForContent(req.query.search)
-  getSearchedForContent(req.query.search)
-    .then(function () {
-      res.send()
-    })
-  res.send('got' + JSON.stringify(req.query.search) ) // sends what is entered in the search bar on the homepage to the screen.
-
+  getSearchedForContent(req.query.search).then(function () {
+    res.send()
+  })
+  res.send('got' + JSON.stringify(req.query.search)) // sends what is entered in the search bar on the homepage to the screen.
 
   createPost(req.body).then(function () {
     getAllThingsPosted()
@@ -148,10 +152,9 @@ app.get('/search', function (req, res) {
 app.post('/quotes', function (req, res) {
   createQuotePost(req.body, req.user.id)
     .then(function () {
-      getAllThingsPosted()
-        .then(function (allPosts) {
-          res.redirect('/')
-        })
+      getAllThingsPosted().then(function (allPosts) {
+        res.redirect('/')
+      })
     })
     .catch(function () {
       res.status(500).send('Not able to create new post')
@@ -161,16 +164,14 @@ app.post('/quotes', function (req, res) {
 // Get Searched For Content
 
 app.get('/search', function (req, res) {
-  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for. 
+  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
   // getSearchedForContent(req.query.search)
-  getSearchedForContent(req.query.search)
-    .then(function (results) {
-      console.log(results.rows)
-      res.send("hello")
-    })
-// sends what is entered in the search bar on the homepage to the screen.
-// res.send('got' + JSON.stringify(req.query.search) ) 
-
+  getSearchedForContent(req.query.search).then(function (results) {
+    console.log(results.rows)
+    res.send('hello')
+  })
+  // sends what is entered in the search bar on the homepage to the screen.
+  // res.send('got' + JSON.stringify(req.query.search) )
 })
 
 // --------------------------------------------------------------------------
@@ -201,16 +202,18 @@ function getAllThingsPosted () {
   )
 }
 
-function getRecommendedUsers () {
-  return db.raw('SELECT * FROM "Users" ORDER BY name limit 4')
-}
+// function getRecommendedUsers () {
+//   return db.raw('SELECT * FROM "Users" ORDER BY name limit 4')
+// }
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
     if (postObject.postedImage !== null) {
       return `
       <div class="post-container">
-        <div class="user-img">  <img src= ${postObject.userImage} height="60" width="59"></div>
+        <div class="user-img">  <img src= ${
+  postObject.userImage
+} height="60" width="59"></div>
         <div class="img-post-container">
           <img class="posted-img" src= ${postObject.postedImage} width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
@@ -250,7 +253,6 @@ function renderPosts (post) {
     }
   }
 
-  
   const CreateAllPostsHTML = post.map(createSinglePostHTML)
 
   return CreateAllPostsHTML.join('')
@@ -264,11 +266,10 @@ function createPost (postObject, userId) {
 }
 
 function createQuotePost (postObject, userId) {
-  return db.raw('INSERT INTO "Posts" ("quote", "source", "userId") VALUES (?, ?, ?)', [
-    postObject.quote,
-    postObject.source,
-    userId
-  ])
+  return db.raw(
+    'INSERT INTO "Posts" ("quote", "source", "userId") VALUES (?, ?, ?)',
+    [postObject.quote, postObject.source, userId]
+  )
 }
 
 // console.log('sup')
@@ -278,7 +279,9 @@ function renderRecommendedUsers (user) {
     <div class="rec-container">
       <div class="sectionthatisnoticon">
       <div class="rec-img">
-      <img class="recommended-user-img" src=${userObject.userImage} height="41" width="41">
+      <img class="recommended-user-img" src=${
+  userObject.userImage
+} height="41" width="41">
       </div>
       <div class="rec-text">
         <h6 class="username">${userObject.name}</h6>
