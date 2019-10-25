@@ -92,7 +92,7 @@ app.get('/', function (req, res) {
       console.log('Your seed data should show up here') // console log this message
       // res.send(allPosts.rows) // then send back the rows full of data from your database
 
-      getAllUsers()
+      getRecommendedUsers()
         .then(function (allUsers) {
 
           res.send(
@@ -100,14 +100,7 @@ app.get('/', function (req, res) {
               postsHTML: renderPosts(allPosts.rows),
               recommendedHTML: renderRecommendedUsers(allUsers.rows)
             })
-          ) 
-
-          // res.redirect('/')
-          // res.send(
-          //   mustache.render(homepageTemplate, {
-          //     recommendedHTML: renderRecommendedUsers(allUsers.rows)
-          //   })       
-          
+          )     
         })
    
         // Mustache is working! But why is everything undefined?
@@ -177,10 +170,7 @@ app.post('/quotes', function (req, res) {
     .then(function () {
       getAllThingsPosted()
         .then(function (allPosts) {
-          res.send(
-            mustache.render(homepageTemplate, {
-              postsHTML: renderPosts(allPosts.rows),
-            })) 
+          res.redirect('/')
         })
     })
     .catch(function () {
@@ -215,8 +205,8 @@ function getAllThingsPosted () {
   return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
 }
 
-function getRecommendedPosts () {
-  return db.raw('SELECT TOP 5 * FROM "USERS" ORDER BY newid()')
+function getRecommendedUsers () {
+  return db.raw('SELECT * FROM "Users" ORDER BY name limit 4')
 }
 
 function renderPosts (post) {
@@ -225,10 +215,9 @@ function renderPosts (post) {
     if (postObject.postedImage !== null) {
       return `
       <div class="post-container">
-        <img class="user-img" src= ${postObject.userImage} height="60" width="59">
-
+        <div class="user-img">  <img src= ${postObject.userImage} height="60" width="59"></div>
         <div class="img-post-container">
-          <img class="posted-img" src= ${postObject.postedImage} height="700" width="500">
+          <img class="posted-img" src= ${postObject.postedImage} width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
              ${postObject.numberOfNotes} notes
@@ -240,7 +229,7 @@ function renderPosts (post) {
       <div class="post-container">
         <img src=${postObject.userImage} height="60" width="60">
         <div class="content-container">
-          <h2>${postObject.quote}</h2>
+          "<h2>${postObject.quote}</h2>"
           ${postObject.source}
           <div class="post-footer">
             ${postObject.numberOfNotes} notes
@@ -286,14 +275,23 @@ function createQuotePost (postObject) {
 
 // console.log('sup')
 function renderRecommendedUsers (user) {
-  console.log('sup')
   function createSingleRecommendation (userObject) {
    
     return `
-    <div>
-      <img class="recommended-user-img" src=${userObject.userImage} height="60" width="59">
-      <h2 class="username">${userObject.name}</h2>
-      <p class="tagline">${userObject.tagline}</p>
+    <div class="rec-container">
+      <div class="sectionthatisnoticon">
+      <div class="rec-img">
+      <img class="recommended-user-img" src=${userObject.userImage} height="41" width="41">
+      </div>
+      <div class="rec-text">
+        <h6 class="username">${userObject.name}</h6>
+        <p class="tagline">${userObject.tagline}</p>
+      </div>
+      </div>
+     
+      <div class="rec-icon-container">
+        <img src="img/add-user.png" height="30px" />
+      </div>
     </div>
   `
   }
