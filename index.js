@@ -16,42 +16,10 @@ app.use(
   })
 )
 
-// ========== Facebook OAuth ==========
+// ========== Setup Passport ==========
 const passport = require('passport')
-
-const FacebookStrategy = require('passport-facebook').Strategy
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: 714303202382978,
-      clientSecret: 'd73be09f0889564f3ed3c19017e32249',
-      callbackURL: 'http://localhost:4000/auth/facebook/callback'
-    },
-    function (accessToken, refereshToken, profile, cb) {
-      return cb(null, profile)
-    }
-
-    //  function (accessToken, refereshToken, profile, cb) {
-    //    User.findOrCreate({ facebookId: profile.id }, function(err, user) {
-    //      if (err) { return cb (err); }
-    //      cb (null, user)
-    //    })
-    //  }
-    //  return cb (null, profile)
-  )
-)
-
-passport.serializeUser(function (user, cb) {
-  cb(null, user)
-})
-
-passport.deserializeUser(function (obj, cb) {
-  cb(null, obj)
-})
-
 app.use(passport.initialize())
 app.use(passport.session())
-// ============= END ===============
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -67,34 +35,24 @@ const port = 4000
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 // const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
 
-// ========== Passport-facebook routes ==========
-app.get('/auth/facebook', passport.authenticate('facebook'))
-
-app.get(
-  '/auth/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/')
-  }
-)
-
-// ================= END ======================
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
-  getAllItemsPosted()
-    // The Promise
-    .then(function (allPosts) {
-      // console.log(allPosts)
-      // When the Promise is received
-      // console.log(allPosts.rows)
-      console.log('Your seed data should show up here') // console log this message
-      // res.send(allPosts.rows) // then send back the rows full of data from your database
 
-      getRecommendedUsers()
-        .then(function (allUsers) {
+  console.log('user information >>> ', req.user)
+  if (!req.user) {
+    res.redirect('/auth')
+  } else {
+    getAllItemsPosted()
+      // The Promise
+      .then(function (allPosts) {
+        // console.log(allPosts)
+        // When the Promise is received
+        // console.log(allPosts.rows)
+        console.log('Your seed data should show up here') // console log this message
+        // res.send(allPosts.rows) // then send back the rows full of data from your database
 
+        getAllUsers().then(function (allUsers) {
           res.send(
             mustache.render(homepageTemplate, {
               postsHTML: renderPosts(allPosts.rows),
@@ -102,14 +60,15 @@ app.get('/', function (req, res) {
             })
           )     
         })
-   
+
         // Mustache is working! But why is everything undefined?
-      // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
-      // res.send(allPosts.rows)
-    })
-    .catch(function () {
-      res.status(500).send('No Posts found')
-    })
+        // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
+        // res.send(allPosts.rows)
+      })
+      .catch(function () {
+        res.status(500).send('No Posts found')
+      })
+  }
 })
 
 // GET Recommended posts
@@ -122,7 +81,7 @@ app.get('/recommendedposts', function (req, res) {
       res.send(
         mustache.render(homepageTemplate, {
           recommendedHTML: renderRecommendedUsers(allUsers.rows)
-        })       
+        })
       )
     })
     .catch(function () {
@@ -150,18 +109,16 @@ app.listen(port, function () {
 // POST new text post
 
 app.post('/posts', function (req, res) {
-  createPost(req.body)
-    .then(function () {
-      getAllThingsPosted()
-        .then(function (allPosts) {
-          res.redirect('/')
-        })
-        .catch(function () {
-          res.status(500).send('No Posts found')
-        })
-    })
+  createPost(req.body).then(function () {
+    getAllThingsPosted()
+      .then(function (allPosts) {
+        res.redirect('/')
+      })
+      .catch(function () {
+        res.status(500).send('No Posts found')
+      })
+  })
 })
-
 
 // POST new quote post
 
@@ -178,9 +135,6 @@ app.post('/quotes', function (req, res) {
     })
 })
 
-
-
-
 // --------------------------------------------------------------------------
 // database Queries and Functions
 
@@ -194,7 +148,9 @@ FROM "Users"
 // `
 
 function getAllItemsPosted () {
-  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
+  return db.raw(
+    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc LIMIT 20'
+  )
 }
 
 function getAllUsers () {
@@ -202,7 +158,9 @@ function getAllUsers () {
 }
 
 function getAllThingsPosted () {
-  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
+  return db.raw(
+    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc LIMIT 20'
+  )
 }
 
 function getRecommendedUsers () {
@@ -211,7 +169,6 @@ function getRecommendedUsers () {
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
-
     if (postObject.postedImage !== null) {
       return `
       <div class="post-container">
@@ -251,8 +208,8 @@ function renderPosts (post) {
         </div>
       </div>
       `
+    }
   }
-}
 
   const CreateAllPostsHTML = post.map(createSinglePostHTML)
 
@@ -267,16 +224,15 @@ function createPost (postObject) {
 }
 
 function createQuotePost (postObject) {
-  return db.raw(
-    'INSERT INTO "Posts" ("quote", "source") VALUES (?, ?)',
-    [postObject.quote, postObject.source]
-  )
+  return db.raw('INSERT INTO "Posts" ("quote", "source") VALUES (?, ?)', [
+    postObject.quote,
+    postObject.source
+  ])
 }
 
 // console.log('sup')
 function renderRecommendedUsers (user) {
   function createSingleRecommendation (userObject) {
-   
     return `
     <div class="rec-container">
       <div class="sectionthatisnoticon">
@@ -300,6 +256,6 @@ function renderRecommendedUsers (user) {
   return createRecommendationsHTML.join('')
 }
 
-
-
-require('./src/local-auth.js')(app)
+require('./src/auth-local.js')(app, passport)
+require('./src/auth-facebook.js')(app, passport)
+require('./src/auth.js')(app, passport)

@@ -1,0 +1,32 @@
+body, main {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: pink;
+    font-family:  Neue,HelveticaNeue,Helvetica,Arial,sans-serif;
+    /* display: flex;
+    justify-content: center; */
+}
+
+form {
+    min-height: 100vh;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+main {
+    text-align: center;
+}
+
+#h1-title {
+    font-family: 'Acme', sans-serif;
+    font-size: 40px;
+}
+
+.form-parts{
+    margin: 5px 0;
+}
