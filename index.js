@@ -31,26 +31,6 @@ const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
-<<<<<<< HEAD
-  getAllItemsPosted()
-    // The Promise
-    .then(function (allPosts) {
-      // When the Promise is received
-      // console.log(allPosts.rows)
-      console.log('Your seed data should show up here') // console log this message
-      // res.send(allPosts.rows) // then send back the rows full of data from your database
-      res.send(
-        mustache.render(homepageTemplate, {
-          postsHTML: renderPosts(allPosts.rows)
-        })
-      ) // Mustache is working! But why is everything undefined?
-      // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
-      // res.send(allPosts.rows)
-    })
-    .catch(function () {
-      res.status(500).send('No Posts found')
-    })
-=======
 
   console.log('user information >>> ', req.user)
   if (!req.user) {
@@ -82,7 +62,6 @@ app.get('/', function (req, res) {
         res.status(500).send('No Posts found')
       })
   }
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
 })
 
 // GET Recommended posts
@@ -121,21 +100,6 @@ app.get('/users', function (request, response, next) {
 // POST new text post
 
 app.post('/posts', function (req, res) {
-<<<<<<< HEAD
-  console.log(req.body, 'this is req.body')
-  createPost(req.body)
-    .then(function () {
-      getAllThingsPosted()
-        .then(function (allPosts) {
-          res.send(
-            mustache.render(homepageTemplate, {
-              postsHTML: renderPosts(allPosts.rows)
-            })
-          )
-        })
-        .catch(function () {
-          res.status(500).send('No Posts found')
-=======
   createPost(req.body).then(function () {
     getAllThingsPosted()
       .then(function (allPosts) {
@@ -155,7 +119,6 @@ app.post('/quotes', function (req, res) {
       getAllThingsPosted()
         .then(function (allPosts) {
           res.redirect('/')
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
         })
     })
     .catch(function () {
@@ -163,7 +126,6 @@ app.post('/quotes', function (req, res) {
     })
 })
 
-<<<<<<< HEAD
 // Get Searched For Content
 
 app.get('/search', function (req, res) {
@@ -179,8 +141,6 @@ app.get('/search', function (req, res) {
 
 })
 
-=======
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
 // --------------------------------------------------------------------------
 // database Queries and Functions
 
@@ -194,13 +154,9 @@ FROM "Users"
 // `
 
 function getAllItemsPosted () {
-<<<<<<< HEAD
-  return db.raw('SELECT * FROM "Posts" LIMIT 10')
-=======
   return db.raw(
     'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc LIMIT 20'
   )
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
 }
 
 function getAllUsers () {
@@ -208,23 +164,6 @@ function getAllUsers () {
 }
 
 function getAllThingsPosted () {
-<<<<<<< HEAD
-  return db.raw('SELECT * FROM "Posts" order by "id" desc LIMIT 10')
-}
-
-// Search Function
-function getSearchedForContent (searchedString) {
-  // return function (searchedString) {
-    // searchedString = searchedString.toLowerCase()
-    // return db('Posts')
-    //   .select('*')
-    //   .where(db.raw('postedMessage'), 'like', `%${searchedString}%`)
-  // }
-  return db.raw(
-    `SELECT * FROM "Posts" WHERE "postedMessage" LIKE
-    ${searchedString}`
-  )
-=======
   return db.raw(
     'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc LIMIT 20'
   )
@@ -232,14 +171,10 @@ function getSearchedForContent (searchedString) {
 
 function getRecommendedUsers () {
   return db.raw('SELECT * FROM "Users" ORDER BY name limit 4')
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
 }
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
-<<<<<<< HEAD
-    if (postObject.postedImage === null) {
-=======
     if (postObject.postedImage !== null) {
       return `
       <div class="post-container">
@@ -266,7 +201,6 @@ function renderPosts (post) {
       </div>
       `
     } else {
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
       return `
       <div class="post-container">
         <img src=${postObject.userImage} height="60" width="60"> 
@@ -281,25 +215,6 @@ function renderPosts (post) {
     
       </div>
       `
-<<<<<<< HEAD
-    } else {
-      return `<div class="post-container">
-                <img class="user-img" src=${
-  postObject.userImage
-} height="60" width="59">
-
-                <div class="img-post-container">
-                   <img class="posted-img" src=${
-  postObject.postedImage
-} height="700" width="500">
-                   <div class="posted-message">${postObject.postedMessage}</div>
-                    <div class="post-footer">
-                      ${postObject.numberOfNotes} notes
-                    </div>
-                </div>
-              </div>`
-=======
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
     }
   }
 
@@ -316,21 +231,6 @@ function createPost (postObject) {
   )
 }
 
-<<<<<<< HEAD
-function renderRecommendedUsers (user) {
-  // function createSingleRecommendation (userObject) {
-  //   return `
-  //   <div>
-  //     <img class="recommended-user-img" src=${userObject.userImage} height="60" width="59">
-  //     <h2 class="username">${userObject.name}</h2>
-  //     <p class="tagline">${userObject.tagline}</p>
-  //   </div>
-  // `
-  // }
-}
-
-require('./src/local-auth.js')(app)
-=======
 function createQuotePost (postObject) {
   return db.raw('INSERT INTO "Posts" ("quote", "source") VALUES (?, ?)', [
     postObject.quote,
@@ -367,4 +267,3 @@ function renderRecommendedUsers (user) {
 require('./src/auth-local.js')(app, passport)
 require('./src/auth-facebook.js')(app, passport)
 require('./src/auth.js')(app, passport)
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
