@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 * {
     box-sizing: border-box;
 }
 body {
 background-color: #001936;
+=======
+main {
+    background-color: #001936;
+>>>>>>> master
 }
 
 p {
@@ -132,13 +137,16 @@ input[type=text], select {
       flex-wrap: wrap;
       flex-direction: row;
 
-  } */
+  }
 
+<<<<<<< HEAD
 .navbar-default {
     background-color: #001936;
     background-image: none;
     background-repeat: no-repeat;
    }
+=======
+>>>>>>> master
   .rec-container {
       display: flex;
       flex-direction: row;

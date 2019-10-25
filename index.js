@@ -61,8 +61,7 @@ app.get('/', function (req, res) {
       .catch(function () {
         res.status(500).send('No Posts found')
       })
-  // }
-})
+  })
 
 // GET Recommended posts
 
@@ -100,6 +99,38 @@ app.get('/users', function (request, response, next) {
 // POST new text post
 
 app.post('/posts', function (req, res) {
+  console.log(req.body, 'this is req.body')
+  createPost(req.body)
+    .then(function () {
+      getAllThingsPosted()
+        .then(function (allPosts) {
+          res.send(
+            mustache.render(homepageTemplate, {
+              postsHTML: renderPosts(allPosts.rows)
+            })
+          )
+        })
+        .catch(function () {
+          res.status(500).send('No Posts found')
+        })
+    })
+    .catch(function () {
+      res.status(500).send('Not able to create new post')
+    })
+})
+
+// Get Searched For Content
+
+app.get('/search', function (req, res) {
+  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for. 
+  // getSearchedForContent(req.query.search)
+  getSearchedForContent(req.query.search)
+    .then(function () {
+      res.send()
+    })
+  res.send('got' + JSON.stringify(req.query.search) ) // sends what is entered in the search bar on the homepage to the screen.
+
+
   createPost(req.body).then(function () {
     getAllThingsPosted()
       .then(function (allPosts) {
@@ -203,8 +234,8 @@ function renderPosts (post) {
     } else {
       return `
       <div class="post-container">
-        <img src=${postObject.userImage} height="60" width="60"> 
-        
+        <img src=${postObject.userImage} height="60" width="60">
+
         <div class="content-container">
           <h2>${postObject.title}</h2>
           ${postObject.postedMessage}
