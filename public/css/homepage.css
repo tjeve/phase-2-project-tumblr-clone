@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 main {
     background-color: #001936;
+=======
+* {
+    box-sizing: border-box;
+}
+body {
+background-color: #001936;
+>>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
 }
 
 p {
@@ -19,13 +27,27 @@ h1 {
     width: 80px;
     padding-top: 25px;
     text-align: center;
-    border: solid 1px grey;
+    /* border: solid 1px grey; */
 }
 
 .post-header {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    width: 530px;
+    margin-left: 90px;
+    /* border: solid red 1px; */
+    background-color: white;
+    border-radius: 5px;
+   
+}
+
+.header-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #001936;
+  
+   
 }
 
 input {
@@ -51,7 +73,7 @@ input {
 }
 
 .user-img {
-    padding-top: 0px;
+    padding-top: 20px;
 }
 
 .content-container {
@@ -108,15 +130,76 @@ input[type=text], select {
     resize: none;
   }
 
+<<<<<<< HEAD
   /* .dashboard-content {
+=======
+  .dashboard-content {
+      /* border: solid 1px red; */
+      background-color: #001936;
+>>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
 
   } */
 
+<<<<<<< HEAD
 .navbar-default {
     background-color: #001936;
     background-image: none;
     background-repeat: no-repeat;
    }
+=======
+  .rec-container {
+      display: flex;
+      flex-direction: row;
+      /* flex-wrap: wrap; */
+      align-self: center;
+      justify-content: space-between; 
+      border-top: grey 1px solid;
+      padding-top: 5px;
+/*    
+      border: solid 1px pink; */
+  }
+
+  .rec-text {
+    /* border: solid 1px red; */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* width: 50%; */
+  }
+
+  .tagline {
+    font-size: 11pt;
+    color: grey;
+  }
+
+  .rec-img {
+    display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 10px;
+
+  }
+
+  .sectionthatisnoticon {
+      display: flex;
+      flex-direction: wrap;
+  }
+  
+  section {
+      /* border: solid 1px red; */
+      width: 70%;
+     
+  }
+
+  .rec-icon-container {
+    display: flex; 
+    float: right;
+    flex-direction: column;
+    /* border: solid 1px red; */
+    
+     justify-content: center;
+  }
+>>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c

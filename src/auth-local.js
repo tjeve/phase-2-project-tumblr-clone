@@ -1,12 +1,12 @@
-module.exports = function (app) {
-  const passport = require('passport')
+module.exports = function (app, passport) {
   const mustache = require('mustache')
   const fs = require('fs')
   const bcrypt = require('bcrypt')
   const saltRounds = 10
   const { getAllUsers, insertNewUser } = require('./db/users.js')
   const fileUpload = require('express-fileupload')
-  const imageDir = 'userImages/'
+  const imageDir = 'public/userImages/'
+  const imageUrl = '/userImages/'
   const uuidv4 = require('uuid/v4')
   const { getOneUser } = require('./db/users')
 
@@ -16,30 +16,10 @@ module.exports = function (app) {
     })
   )
 
-  const authTemplate = fs.readFileSync(
-    './templates/local-auth.mustache',
-    'utf8'
-  )
   const registerTemplate = fs.readFileSync(
     './templates/register.mustache',
     'utf8'
   )
-
-  app.use(passport.initialize())
-  app.use(passport.session())
-
-  passport.serializeUser(function (user, cb) {
-    console.log('this is serializeuser....')
-    // console.log(user)
-    cb(null, user.email)
-  })
-
-  passport.deserializeUser(function (id, cb) {
-    console.log('this is deserializeuser....')
-    // User.findById(id, function (err, user) {
-    //   cb(err, user)
-    // })
-  })
 
   const LocalStrategy = require('passport-local').Strategy
 
@@ -73,15 +53,11 @@ module.exports = function (app) {
     })
   )
 
-  app.get('/auth/local', function (req, res) {
-    res.send(mustache.render(authTemplate))
-  })
-
   app.post(
     '/auth/local',
     passport.authenticate('local', { failureRedirect: '/auth/local-error' }),
     function (req, res) {
-      res.redirect('/auth/local-success?username=' + req.user.name)
+      res.redirect('/')
     }
   )
 
@@ -100,6 +76,7 @@ module.exports = function (app) {
       fs.writeFile(userObj.userImage, image.data, function (err) {
         if (err) console.error(err)
         console.log('Imagefile was saved. ', image.name)
+        userObj.userImage = imageUrl + filename
       })
     }
 
@@ -125,7 +102,7 @@ module.exports = function (app) {
         userObj.password = encrypted
         insertNewUser(userObj)
           .then(function () {
-            res.redirect('/users')
+            res.redirect('/auth')
           })
           .catch(function (error) {
             console.log(error)
@@ -138,8 +115,8 @@ module.exports = function (app) {
   app.get('/users', function (req, res) {
     getAllUsers()
       .then(function (allUsers) {
-        console.log(allUsers)
-        res.send(allUsers)
+        console.log(allUsers.rows)
+        res.send(allUsers.rows)
       })
       .error(function () {
         res.send('error occured!')
