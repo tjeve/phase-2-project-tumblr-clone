@@ -204,7 +204,7 @@ FROM "Users"
 // `
 
 function getAllItemsPosted () {
-  return db.raw('SELECT * FROM "Posts"')
+  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
 }
 
 function getAllUsers () {
@@ -212,7 +212,7 @@ function getAllUsers () {
 }
 
 function getAllThingsPosted () {
-  return db.raw('SELECT * FROM "Posts" order by "id" desc')
+  return db.raw('SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc')
 }
 
 function getRecommendedPosts () {
@@ -221,6 +221,7 @@ function getRecommendedPosts () {
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
+
     if (postObject.postedImage !== null) {
       return `
       <div class="post-container">
@@ -251,6 +252,7 @@ function renderPosts (post) {
       return `
       <div class="post-container">
         <img src=${postObject.userImage} height="60" width="60">
+
         <div class="content-container">
           <h2>${postObject.title}</h2>
           ${postObject.postedMessage}
