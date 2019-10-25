@@ -33,9 +33,9 @@ app.use('/', express.static(path.join(__dirname, '/public')))
 app.get('/', function (req, res) {
 
   console.log('user information >>> ', req.user)
-  if (!req.user) {
-    res.redirect('/auth')
-  } else {
+  // if (!req.user) {
+  //   res.redirect('/auth')
+  // } else {
     getAllItemsPosted()
       // The Promise
       .then(function (allPosts) {
@@ -61,7 +61,7 @@ app.get('/', function (req, res) {
       .catch(function () {
         res.status(500).send('No Posts found')
       })
-  }
+  // }
 })
 
 // GET Recommended posts
