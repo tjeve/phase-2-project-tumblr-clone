@@ -159,14 +159,8 @@ app.get('/search', function (req, res) {
   // getSearchedForContent(req.query.search)
   getSearchedForContent(req.query.search)
     .then(function (results) {
-    // console.log(results.rows, "<-- This is Line 162")
-    // console.log(mustache.render(homepageTemplate))
-      // res.send('')
-      console.log(results, "<-- REsults")
-      res.send(mustache.render(homepageTemplate, {
-        // postsHTML: renderPosts(results.rows)
-        postsHTML: ''
-      }))
+      console.log(results.rows)
+      res.send("hello")
     })
 // sends what is entered in the search bar on the homepage to the screen.
 // res.send('got' + JSON.stringify(req.query.search) ) 
