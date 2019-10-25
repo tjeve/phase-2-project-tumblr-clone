@@ -188,7 +188,7 @@ FROM "Users"
 
 function getAllItemsPosted () {
   return db.raw(
-    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc LIMIT 20'
+    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by RANDOM() desc LIMIT 20'
   )
 }
 
@@ -198,7 +198,7 @@ function getAllUsers () {
 
 function getAllThingsPosted () {
   return db.raw(
-    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc LIMIT 20'
+    'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by RANDOM() desc LIMIT 20'
   )
 }
 
