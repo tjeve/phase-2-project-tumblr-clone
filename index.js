@@ -109,17 +109,7 @@ app.post('/posts', function (req, res) {
   console.log(req.body, 'this is req.body')
   createPost(req.body, req.user.id)
     .then(function () {
-      getAllThingsPosted()
-        .then(function (allPosts) {
-          res.send(
-            mustache.render(homepageTemplate, {
-              postsHTML: renderPosts(allPosts.rows)
-            })
-          )
-        })
-        .catch(function () {
-          res.status(500).send('No Posts found')
-        })
+      res.redirect('/')
     })
     .catch(function () {
       res.status(500).send('Not able to create new post')
