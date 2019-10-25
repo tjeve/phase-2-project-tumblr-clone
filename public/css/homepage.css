@@ -1,13 +1,5 @@
-<<<<<<< HEAD
 main {
     background-color: #001936;
-=======
-* {
-    box-sizing: border-box;
-}
-body {
-background-color: #001936;
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
 }
 
 p {
@@ -130,26 +122,21 @@ input[type=text], select {
     resize: none;
   }
 
-<<<<<<< HEAD
-  /* .dashboard-content {
-=======
   .dashboard-content {
       /* border: solid 1px red; */
       background-color: #001936;
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
 
-  } */
+  } 
 
-<<<<<<< HEAD
 .navbar-default {
     background-color: #001936;
     background-image: none;
     background-repeat: no-repeat;
    }
-=======
+
   .rec-container {
       display: flex;
       flex-direction: row;
@@ -202,4 +189,4 @@ input[type=text], select {
     
      justify-content: center;
   }
->>>>>>> 0a0b6f3cf3f1b82c5501a6379c993481d276ca0c
+

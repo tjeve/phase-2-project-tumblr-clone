@@ -100,6 +100,38 @@ app.get('/users', function (request, response, next) {
 // POST new text post
 
 app.post('/posts', function (req, res) {
+  console.log(req.body, 'this is req.body')
+  createPost(req.body)
+    .then(function () {
+      getAllThingsPosted()
+        .then(function (allPosts) {
+          res.send(
+            mustache.render(homepageTemplate, {
+              postsHTML: renderPosts(allPosts.rows)
+            })
+          )
+        })
+        .catch(function () {
+          res.status(500).send('No Posts found')
+        })
+    })
+    .catch(function () {
+      res.status(500).send('Not able to create new post')
+    })
+})
+
+// Get Searched For Content
+
+app.get('/search', function (req, res) {
+  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for. 
+  // getSearchedForContent(req.query.search)
+  getSearchedForContent(req.query.search)
+    .then(function () {
+      res.send()
+    })
+  res.send('got' + JSON.stringify(req.query.search) ) // sends what is entered in the search bar on the homepage to the screen.
+
+
   createPost(req.body).then(function () {
     getAllThingsPosted()
       .then(function (allPosts) {
@@ -114,7 +146,7 @@ app.post('/posts', function (req, res) {
 // POST new quote post
 
 app.post('/quotes', function (req, res) {
-  createQuotePost(req.body)
+  createQuotePost(req.body, req.user.id)
     .then(function () {
       getAllThingsPosted()
         .then(function (allPosts) {
@@ -224,17 +256,18 @@ function renderPosts (post) {
   return CreateAllPostsHTML.join('')
 }
 
-function createPost (postObject) {
+function createPost (postObject, userId) {
   return db.raw(
-    'INSERT INTO "Posts" ("postedMessage", "title") VALUES (?, ?)',
-    [postObject.postedMessage, postObject.title]
+    'INSERT INTO "Posts" ("postedMessage", "title", "userId") VALUES (?, ?, ?)',
+    [postObject.postedMessage, postObject.title, userId]
   )
 }
 
-function createQuotePost (postObject) {
-  return db.raw('INSERT INTO "Posts" ("quote", "source") VALUES (?, ?)', [
+function createQuotePost (postObject, userId) {
+  return db.raw('INSERT INTO "Posts" ("quote", "source", "userId") VALUES (?, ?, ?)', [
     postObject.quote,
-    postObject.source
+    postObject.source,
+    userId
   ])
 }
 
