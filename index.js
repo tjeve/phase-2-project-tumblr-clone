@@ -155,14 +155,21 @@ app.post('/posts', function (req, res) {
 // Get Searched For Content
 
 app.get('/search', function (req, res) {
-  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for. 
+  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for. 
   // getSearchedForContent(req.query.search)
   getSearchedForContent(req.query.search)
-    .then(function () {
-      res.send()
+    .then(function (results) {
+    // console.log(results.rows, "<-- This is Line 162")
+    // console.log(mustache.render(homepageTemplate))
+      // res.send('')
+      console.log(results, "<-- REsults")
+      res.send(mustache.render(homepageTemplate, {
+        // postsHTML: renderPosts(results.rows)
+        postsHTML: ''
+      }))
     })
-  res.send('got' + JSON.stringify(req.query.search) ) // sends what is entered in the search bar on the homepage to the screen.
-
+// sends what is entered in the search bar on the homepage to the screen.
+// res.send('got' + JSON.stringify(req.query.search) ) 
 
 })
 
@@ -179,7 +186,7 @@ FROM "Users"
 // `
 
 function getAllItemsPosted () {
-  return db.raw('SELECT * FROM "Posts"')
+  return db.raw('SELECT * FROM "Posts" LIMIT 10')
 }
 
 function getAllUsers () {
@@ -187,7 +194,21 @@ function getAllUsers () {
 }
 
 function getAllThingsPosted () {
-  return db.raw('SELECT * FROM "Posts" order by "id" desc')
+  return db.raw('SELECT * FROM "Posts" order by "id" desc LIMIT 10')
+}
+
+// Search Function
+function getSearchedForContent (searchedString) {
+  // return function (searchedString) {
+    // searchedString = searchedString.toLowerCase()
+    return db('Posts')
+      .select('*')
+      .where(db.raw('postedMessage'), 'like', `%${searchedString}%`)
+  // }
+  // return db.raw(
+  //   `SELECT * FROM "Posts" WHERE "postedMessage" LIKE '%{?}%';`,
+  //   [searchedString]
+  // )
 }
 
 function renderPosts (post) {
@@ -226,6 +247,7 @@ function renderPosts (post) {
     }
   }
 
+  
   const CreateAllPostsHTML = post.map(createSinglePostHTML)
 
   return CreateAllPostsHTML.join('')
@@ -251,12 +273,3 @@ function renderRecommendedUsers (user) {
 }
 
 require('./src/local-auth.js')(app)
-
-// Search Function
-
-function getSearchedForContent (searchedString) {
-  return db.raw(
-    'SELECT * FROM "Posts" WHERE "postedMessage" = ?',
-    [searchedString]
-  )
-}
