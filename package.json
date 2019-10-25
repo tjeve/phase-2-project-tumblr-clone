@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "standard",
-    "start": "nodemon --ext 'js, mustache' index.js",
-    "build": "mustache dataView.json myTemplate.mustache > public/output.html"
+    "start": "nodemon --ext 'js, mustache' index.js"
   },
   "author": "",
   "license": "ISC",

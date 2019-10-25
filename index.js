@@ -2,7 +2,10 @@ const fs = require('fs')
 const express = require('express')
 const app = express()
 const dbConfigs = require('./knexfile.js')
-const db = require('knex')(dbConfigs.development)
+const environment = process.env.NODE_ENV || 'development'
+const config =
+  environment === 'production' ? dbConfigs.production : dbConfigs.development
+const db = require('knex')(config)
 const mustache = require('mustache')
 const path = require('path')
 
@@ -29,8 +32,8 @@ app.use(express.urlencoded({ extended: true }))
 //   getAllPostsFromOneUser
 // } = require('./src/db/posts.js')
 
-const port = 4000
-// -----------------------------------------------------------d---------------
+const port = process.env.PORT || 4000
+// ---------------------------------------------------s--------d---------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
 // const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
@@ -205,7 +208,9 @@ function renderPosts (post) {
   postObject.userImage
 } height="60" width="59" alt=""></div>
         <div class="img-post-container">
-          <img class="posted-img" src=${postObject.postedImage} alt="" width="500">
+          <img class="posted-img" src=${
+  postObject.postedImage
+} alt="" width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
              ${postObject.numberOfNotes} notes
