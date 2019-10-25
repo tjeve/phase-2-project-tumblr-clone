@@ -6,7 +6,7 @@ module.exports = function (app) {
   )
 
   app.get('/auth', function (req, res) {
-    console.log(req)
+    // console.log(req)
     res.send(authTemplate)
   })
 }

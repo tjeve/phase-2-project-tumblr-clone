@@ -15,12 +15,19 @@
 
 <body>
   <main class="container">
-    <form method="post" class="form-signin row justify-content-center">
+    <form action="/auth/local" method="post" class="form-signin row justify-content-center">
       <div class="form-parts col-12 col-md-6">
         <i class="fab fa-tumblr-square fa-10x"></i>
         <h1 id="h1-title" class="h3 mb-3 font-weight-normal">tumblr clone</h1>
       </div>
       <div class="form-parts col-12 col-md-6">
+        <button id="btn-facebook" class="btn btn-primary btn-lg btn-block">
+          <i class="fab fa-facebook-square"></i> Login with Facebook</button>
+      </div>
+
+      <div class="form-parts col-12 col-md-6">
+        <hr>
+        <h6>Login with Email</h6>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" name="username" id="inputEmail" class="form-control" placeholder="Email address" required=""
           autofocus="">
@@ -31,7 +38,10 @@
           required="">
       </div>
       <div class="form-parts col-12 col-md-6">
-        <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-outline-primary btn-block" type="submit">Sign in</button>
+      </div>
+      <div class="form-parts col-12 col-md-6">
+        <button id="btn-signup" class="btn btn-outline-success btn-block">Sign up</button>
       </div>
     </form>
   </main>
@@ -46,6 +56,16 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
   </script>
   <script src="https://kit.fontawesome.com/21961517fb.js" crossorigin="anonymous"></script>
+  <script>
+    const btnFacebook = document.querySelector('#btn-facebook')
+    const btnSignUp = document.querySelector('#btn-signup')
+    btnSignUp.addEventListener('click', function () {
+      window.location = '/register'
+    })
+    btnFacebook.addEventListener('click', function () {
+      window.location = '/auth/facebook'
+    })
+  </script>
 
 </body>
 

@@ -1,6 +1,6 @@
-module.exports = function (app) {
+module.exports = function (app, passport) {
   // ========== Facebook OAuth ==========
-  const passport = require('passport')
+  //   const passport = require('passport')
 
   const FacebookStrategy = require('passport-facebook').Strategy
   passport.use(
@@ -32,8 +32,8 @@ module.exports = function (app) {
     cb(null, obj)
   })
 
-  app.use(passport.initialize())
-  app.use(passport.session())
+  // app.use(passport.initialize())
+  // app.use(passport.session())
 
   // ============= END ===============
 
@@ -42,7 +42,7 @@ module.exports = function (app) {
 
   app.get(
     '/auth/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: '/login' }),
+    passport.authenticate('facebook', { failureRedirect: '/auth' }),
     function (req, res) {
       // Successful authentication, redirect home.
       res.redirect('/')
