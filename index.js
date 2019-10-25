@@ -195,14 +195,14 @@ function getAllThingsPosted () {
 function getSearchedForContent (searchedString) {
   // return function (searchedString) {
     // searchedString = searchedString.toLowerCase()
-    return db('Posts')
-      .select('*')
-      .where(db.raw('postedMessage'), 'like', `%${searchedString}%`)
+    // return db('Posts')
+    //   .select('*')
+    //   .where(db.raw('postedMessage'), 'like', `%${searchedString}%`)
   // }
-  // return db.raw(
-  //   `SELECT * FROM "Posts" WHERE "postedMessage" LIKE '%{?}%';`,
-  //   [searchedString]
-  // )
+  return db.raw(
+    `SELECT * FROM "Posts" WHERE "postedMessage" LIKE
+    ${searchedString}`
+  )
 }
 
 function renderPosts (post) {
