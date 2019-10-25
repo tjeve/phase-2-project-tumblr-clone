@@ -5,24 +5,17 @@ const dbConfigs = require('./knexfile.js')
 const db = require('knex')(dbConfigs.development)
 const mustache = require('mustache')
 const path = require('path')
-
-// ========== Express Session ==========
-const session = require('express-session')
-app.use(
-  session({
-    secret: 'p3qbvkefashf4h2q',
-    resave: false,
-    saveUninitialized: false
-  })
-)
+const bodyParser = require('body-parser')
 
 // ========== Setup Passport ==========
 const passport = require('passport')
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use(bodyParser.json())
+
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded())
 // const {
 //   getAllPosts,
 //   getOnePost,
@@ -73,11 +66,9 @@ app.get('/', function (req, res) {
 
 // GET Recommended posts
 
-app.get('/recommendedposts', function (req, res) {
-  console.log('helllo')
+app.get('/', function (req, res) {
   getAllUsers()
     .then(function (allUsers) {
-      // res.redirect('/')
       res.send(
         mustache.render(homepageTemplate, {
           recommendedHTML: renderRecommendedUsers(allUsers.rows)
@@ -85,7 +76,7 @@ app.get('/recommendedposts', function (req, res) {
       )
     })
     .catch(function () {
-      res.status(500).send('No recommendations found')
+      res.status(500).send('No Users found')
     })
 })
 
@@ -95,21 +86,53 @@ app.listen(port, function () {
 
 // GET /users
 
-// app.get('/users', function (request, response, next) {
-//   getAllUsers()
-//     .then(function (allUsers) {
-//       console.log('#######', allUsers.rows)
-//       response.send(allUsers.rows)
-//     })
-//     .catch(function () {
-//       response.status(500).send('No Users found')
-//     })
-// })
+app.get('/users', function (request, response, next) {
+  getAllUsers()
+    .then(function (allUsers) {
+      console.log('get user info', allUsers.rows)
+      response.send(allUsers.rows)
+    })
+    .catch(function () {
+      response.status(500).send('No Users found')
+    })
+})
 
 // POST new text post
 
 app.post('/posts', function (req, res) {
-  createPost(req.body, req.user.id).then(function () {
+  console.log(req.body, 'this is req.body')
+  createPost(req.body)
+    .then(function () {
+      getAllThingsPosted()
+        .then(function (allPosts) {
+          res.send(
+            mustache.render(homepageTemplate, {
+              postsHTML: renderPosts(allPosts.rows)
+            })
+          )
+        })
+        .catch(function () {
+          res.status(500).send('No Posts found')
+        })
+    })
+    .catch(function () {
+      res.status(500).send('Not able to create new post')
+    })
+})
+
+// Get Searched For Content
+
+app.get('/search', function (req, res) {
+  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for. 
+  // getSearchedForContent(req.query.search)
+  getSearchedForContent(req.query.search)
+    .then(function () {
+      res.send()
+    })
+  res.send('got' + JSON.stringify(req.query.search) ) // sends what is entered in the search bar on the homepage to the screen.
+
+
+  createPost(req.body).then(function () {
     getAllThingsPosted()
       .then(function (allPosts) {
         res.redirect('/')
@@ -206,6 +229,7 @@ function renderPosts (post) {
             ${postObject.numberOfNotes} notes
           </div>
         </div>
+    
       </div>
       `
     }

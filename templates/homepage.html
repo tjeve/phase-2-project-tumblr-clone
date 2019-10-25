@@ -17,8 +17,44 @@
     <title>Tumblr Clone</title>
 </head>
 <body cz-shortcut-listen="true">
-    <div class="header-container">
-        <div class="post-header">
+  <!--------------- Navbar ------------------>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #001936;" style= "color: gray;">
+        <a class="navbar-brand" href="https://www.tumblr.com/"><h1>t</h1></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <form class="form-inline my-4 my-lg-0 input-large" method="get" action="/search" id="search_form">
+            <input class="form-control mr-md-4" name="search" type="search" placeholder="Search Tumblr Clone" aria-label="Search">
+            <input class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</input>
+        </form>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav d-flex flex-row justify-content-end">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Explore-Trending</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Inbox</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Messaging</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Activity</a>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Make A Post</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+<!--------------- End of Navbar ------------------>
+    <h1 class="title">Welcome to Tumblr!</h1>
+    <div class="post-header">
         <div class="icon-container">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 <img src="img/text.png" height="30px">
