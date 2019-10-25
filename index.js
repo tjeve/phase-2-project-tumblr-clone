@@ -213,9 +213,9 @@ function renderPosts (post) {
       <div class="post-container">
         <div class="user-img">  <img src= ${
   postObject.userImage
-} height="60" width="59"></div>
+} height="60" width="59" alt=""></div>
         <div class="img-post-container">
-          <img class="posted-img" src= ${postObject.postedImage} width="500">
+          <img class="posted-img" src=${postObject.postedImage} alt="" width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
              ${postObject.numberOfNotes} notes
@@ -225,7 +225,7 @@ function renderPosts (post) {
     } else if (postObject.quote !== null) {
       return `
       <div class="post-container">
-        <img src=${postObject.userImage} height="60" width="60">
+        <img src=${postObject.userImage} alt="" height="60" width="60">
         <div class="content-container">
           "<h2>${postObject.quote}</h2>"
           ${postObject.source}
@@ -238,7 +238,7 @@ function renderPosts (post) {
     } else {
       return `
       <div class="post-container">
-        <img src=${postObject.userImage} height="60" width="60"> 
+        <img src=${postObject.userImage} alt="" height="60" width="60"> 
         
         <div class="content-container">
           <h2>${postObject.title}</h2>
@@ -279,7 +279,7 @@ function renderRecommendedUsers (user) {
     <div class="rec-container">
       <div class="sectionthatisnoticon">
       <div class="rec-img">
-      <img class="recommended-user-img" src=${
+      <img class="recommended-user-img" alt="" src=${
   userObject.userImage
 } height="41" width="41">
       </div>
