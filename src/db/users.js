@@ -9,7 +9,12 @@ function insertNewUser (userObject) {
   return db('Users').insert(userObject)
 }
 
+function getOneUser (obj) {
+  return db('Users').where(obj).limit(1)
+}
+
 module.exports = {
   getAllUsers: getAllUsers,
-  insertNewUser: insertNewUser
+  insertNewUser: insertNewUser,
+  getOneUser: getOneUser
 }
