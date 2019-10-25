@@ -146,7 +146,7 @@ app.get('/search', function (req, res) {
 // POST new quote post
 
 app.post('/quotes', function (req, res) {
-  createQuotePost(req.body)
+  createQuotePost(req.body, req.user.id)
     .then(function () {
       getAllThingsPosted()
         .then(function (allPosts) {
@@ -240,17 +240,18 @@ function renderPosts (post) {
   return CreateAllPostsHTML.join('')
 }
 
-function createPost (postObject) {
+function createPost (postObject, userId) {
   return db.raw(
-    'INSERT INTO "Posts" ("postedMessage", "title") VALUES (?, ?)',
-    [postObject.postedMessage, postObject.title]
+    'INSERT INTO "Posts" ("postedMessage", "title", "userId") VALUES (?, ?, ?)',
+    [postObject.postedMessage, postObject.title, userId]
   )
 }
 
-function createQuotePost (postObject) {
-  return db.raw('INSERT INTO "Posts" ("quote", "source") VALUES (?, ?)', [
+function createQuotePost (postObject, userId) {
+  return db.raw('INSERT INTO "Posts" ("quote", "source", "userId") VALUES (?, ?, ?)', [
     postObject.quote,
-    postObject.source
+    postObject.source,
+    userId
   ])
 }
 
