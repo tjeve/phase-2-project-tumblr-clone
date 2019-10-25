@@ -154,8 +154,23 @@ app.post('/quotes', function (req, res) {
         })
     })
     .catch(function () {
-      res.status(500).send('Not able to create new quote post')
+      res.status(500).send('Not able to create new post')
     })
+})
+
+// Get Searched For Content
+
+app.get('/search', function (req, res) {
+  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for. 
+  // getSearchedForContent(req.query.search)
+  getSearchedForContent(req.query.search)
+    .then(function (results) {
+      console.log(results.rows)
+      res.send("hello")
+    })
+// sends what is entered in the search bar on the homepage to the screen.
+// res.send('got' + JSON.stringify(req.query.search) ) 
+
 })
 
 // --------------------------------------------------------------------------
@@ -220,8 +235,8 @@ function renderPosts (post) {
     } else {
       return `
       <div class="post-container">
-        <img src=${postObject.userImage} height="60" width="60">
-
+        <img src=${postObject.userImage} height="60" width="60"> 
+        
         <div class="content-container">
           <h2>${postObject.title}</h2>
           ${postObject.postedMessage}
@@ -235,6 +250,7 @@ function renderPosts (post) {
     }
   }
 
+  
   const CreateAllPostsHTML = post.map(createSinglePostHTML)
 
   return CreateAllPostsHTML.join('')

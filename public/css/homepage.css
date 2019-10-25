@@ -129,7 +129,13 @@ input[type=text], select {
       flex-wrap: wrap;
       flex-direction: row;
 
-  }
+  } 
+
+.navbar-default {
+    background-color: #001936;
+    background-image: none;
+    background-repeat: no-repeat;
+   }
 
   .rec-container {
       display: flex;
@@ -183,3 +189,4 @@ input[type=text], select {
     
      justify-content: center;
   }
+
