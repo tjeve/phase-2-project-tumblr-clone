@@ -7,7 +7,9 @@ This is a backend project that utilizes backend and database technologies such a
 - Knex.js
 - Node.js
 - Express
+- Passport.js
 - Mustache Template system
+- PostgreSQL
 
 **Available Scripts**
 
