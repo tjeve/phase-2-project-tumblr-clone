@@ -61,7 +61,8 @@ app.get('/', function (req, res) {
       .catch(function () {
         res.status(500).send('No Posts found')
       })
-  })
+  }
+)
 
 // GET Recommended posts
 
@@ -169,7 +170,6 @@ app.get('/search', function (req, res) {
     })
 // sends what is entered in the search bar on the homepage to the screen.
 // res.send('got' + JSON.stringify(req.query.search) ) 
-
 })
 
 // --------------------------------------------------------------------------
