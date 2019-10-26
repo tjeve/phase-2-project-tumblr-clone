@@ -4,12 +4,12 @@ This is a backend project that utilizes backend and database technologies such a
 
 ## Technologies Used
 
-- Knex.js
-- Node.js
-- Express
-- Passport.js
-- Mustache Template system
-- PostgreSQL
+- Knex.js for database seeding and migrations
+- Node.js for server operations
+- Express for server operations
+- Passport.js for authentication
+- Mustache.js for templating
+- PostgreSQL for the database
 
 **Available Scripts**
 
