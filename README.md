@@ -11,6 +11,12 @@ This is a backend project that utilizes backend and database technologies such a
 - Express
 - Mustache Template system
 
+**Available Scripts**
+
+In the project directory, you can run:
+`npm run deploy`
+in your terminal which deploys the application to Surge. 
+
 ## Features
 
 - Ability to search for posts
