@@ -8,7 +8,7 @@ module.exports = function (app, passport) {
       {
         clientID: 714303202382978,
         clientSecret: 'd73be09f0889564f3ed3c19017e32249',
-        callbackURL: 'https://digitalcrafts-tumblr-clone.herokuapp.com/'
+        callbackURL: '/auth/facebook/callback'
       },
       function (accessToken, refereshToken, profile, cb) {
         return cb(null, profile)
