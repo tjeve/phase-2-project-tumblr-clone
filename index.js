@@ -8,6 +8,7 @@ const config =
 const db = require('knex')(config)
 const mustache = require('mustache')
 const path = require('path')
+const knex = require('knex')({client: 'pg'})
 
 // ========== Express Session ==========
 const session = require('express-session')
@@ -33,18 +34,17 @@ app.use(express.urlencoded({ extended: true }))
 // } = require('./src/db/posts.js')
 
 const port = process.env.PORT || 4000
-// ---------------------------------------------------s--------d---------------
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
-// const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
+const searchResultsTemplate = fs.readFileSync('./templates/search-results.html', 'utf8')
 
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
   console.log('user information >>> ', req.user)
-  if (!req.user) {
-    res.redirect('/auth')
-  } else {
+  // if (!req.user) {
+  //   res.redirect('/auth')
+  // } else {
     getAllItemsPosted()
       // The Promise
       .then(function (allPosts) {
@@ -71,23 +71,7 @@ app.get('/', function (req, res) {
         res.status(500).send('No Posts found')
       })
   }
-})
-
-// GET Recommended posts
-
-// app.get('/', function (req, res) {
-//   getAllUsers()
-//     .then(function (allUsers) {
-//       res.send(
-//         mustache.render(homepageTemplate, {
-//           recommendedHTML: renderRecommendedUsers(allUsers.rows)
-//         })
-//       )
-//     })
-//     .catch(function () {
-//       res.status(500).send('No Users found')
-//     })
-// })
+)
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -122,23 +106,22 @@ app.post('/posts', function (req, res) {
 // Get Searched For Content
 
 app.get('/search', function (req, res) {
-  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for.
-  // getSearchedForContent(req.query.search)
-  getSearchedForContent(req.query.search).then(function () {
-    res.send()
+  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
+  getSearchedForContent(req.query.search)
+    .then(function (results) {
+      // console.log(results.rows, "<-- These are your results")
+      res.send( //see if you can get results.fields to render on the homepage
+        mustache.render(searchResultsTemplate, {
+          resultsHTML: renderPosts(results.rows)
+        })
+      )
+    })
+    .catch(function() {
+      res.status(500).send('Not able to find searched term')
+    })
+  // res.send('got' + JSON.stringify(req.query.search)) // sends what is entered in the search bar on the homepage to the screen.
   })
-  res.send('got' + JSON.stringify(req.query.search)) // sends what is entered in the search bar on the homepage to the screen.
 
-  createPost(req.body).then(function () {
-    getAllThingsPosted()
-      .then(function (allPosts) {
-        res.redirect('/')
-      })
-      .catch(function () {
-        res.status(500).send('No Posts found')
-      })
-  })
-})
 
 // POST new quote post
 
@@ -156,16 +139,17 @@ app.post('/quotes', function (req, res) {
 
 // Get Searched For Content
 
-app.get('/search', function (req, res) {
-  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
-  // getSearchedForContent(req.query.search)
-  getSearchedForContent(req.query.search).then(function (results) {
-    console.log(results.rows)
-    res.send('hello')
-  })
-  // sends what is entered in the search bar on the homepage to the screen.
-  // res.send('got' + JSON.stringify(req.query.search) )
-})
+// app.get('/search', function (req, res) {
+//   // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
+//   // getSearchedForContent(req.query.search)
+//   getSearchedForContent(req.query.search)
+//     .then(function (results) {
+//       console.log(results.rows)
+//       res.send(results.rows)
+//     })
+// // sends what is entered in the search bar on the homepage to the screen.
+// // res.send('got' + JSON.stringify(req.query.search) ) 
+// })
 
 // --------------------------------------------------------------------------
 // database Queries and Functions
@@ -192,6 +176,15 @@ function getAllUsers () {
 function getAllThingsPosted () {
   return db.raw(
     'SELECT "Posts".*, "Users"."userImage" FROM "Posts" LEFT JOIN "Users" On "Users"."id" = "Posts"."userId" order by "Posts"."id" desc LIMIT 20'
+  )
+}
+
+function getSearchedForContent (searchedWord) {
+  const term = '%' + searchedWord + '%'
+  
+  //Raw
+  return db.raw(
+    `SELECT * FROM "Posts" WHERE "postedMessage" LIKE ?`, [term]
   )
 }
 
