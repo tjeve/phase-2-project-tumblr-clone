@@ -28,11 +28,15 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
     width: 530px;
-    margin-left: 90px;
+    margin-left: 70px;
     /* border: solid red 1px; */
     background-color: white;
     border-radius: 5px;
    
+}
+
+.postheader-container {
+    background-color: #001936;
 }
 
 .header-container {
@@ -41,6 +45,10 @@ h1 {
     background-color: #001936;
   
    
+}
+
+.recommended-blogs-container {
+    margin-left: 25px;
 }
 
 input {
@@ -138,6 +146,7 @@ input[type=text], select {
 
   .dashboard-content {
       /* border: solid 1px red; */
+      padding-top: 25px;
       background-color: #001936;
       display: flex;
       flex-wrap: wrap;

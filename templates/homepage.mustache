@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<!-- Bootstrap-->
-    <link rel="stylesheet" href="/css/homepage.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Bootstrap-->
+  <link rel="stylesheet" href="/css/homepage.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="/js/main.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <!-- <script src="/js/main.js"></script> -->
 
 
-    <title>Tumblr Clone</title>
+  <title>Tumblr Clone</title>
 </head>
+
 <body cz-shortcut-listen="true">
   <!--------------- Navbar ------------------>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #001936;" style= "color: gray;">
@@ -45,151 +50,163 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 <img src="img/text.png" height="30px">
               </button>
+            </div>
+            <div class="modal-body">
 
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                     
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
+              <!-- ===================FORM STARTS HERE ====================== -->
 
-    <!-- ===================FORM STARTS HERE ====================== -->
-
-                        <form action="/posts" method="post" id="form1">
-                            <input type="text" name="title" placeholder="Title"/>
-                            <br>
-                            <textarea name="postedMessage" rows="5" cols="50">
+              <form action="/posts" method="post" id="form1">
+                <input type="text" name="title" placeholder="Title" />
+                <br>
+                <textarea name="postedMessage" rows="5" cols="50">
                                Your text hereee
                                 </textarea>
-                        
-                          </form>
-                        
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary" form="form1">Post</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
+              </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" form="form1">Post</button>
+            </div>
+          </div>
         </div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#photoModal">
-                <img src="img/photo.png" height="30px">
-        </button>
-        <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-             
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
+      </div>
 
-    <!-- ===================FORM STARTS HERE ====================== -->
+    </div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#photoModal">
+      <img src="img/photo.png" height="30px">
+    </button>
+    <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
 
-    <form action="images/photo.png" onchange="previewFile()" >
-        Select image to upload: <br>
-        <input type="file" name="file" id="file" value><br>
-        <label for="file"> Select a file to upload</label><br>
-        <input type="submit" value="Submit">
-      </form>
-                        
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary" form="form3">Post</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <!-- ===================FORM STARTS HERE ====================== -->
+
+            <form action="images/photo.png" onchange="previewFile()">
+              Select image to upload: <br>
+              <input type="file" name="file" id="file" value><br>
+              <label for="file"> Select a file to upload</label><br>
+              <input type="submit" value="Submit">
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" form="form3">Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#quoteModal">
-                <img src="img/quote.png" height="30px">
-        </button>
-        <div class="modal fade" id="quoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                  
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#quoteModal">
+      <img src="img/quote.png" height="30px">
+    </button>
+    <div class="modal fade" id="quoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
 
-    <!-- ===================FORM STARTS HERE ====================== -->
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
 
-                        <form action="/quotes" method="post" id="form2">
-                            <input type="text" name="quote" placeholder='"Quote"'/>
-                            <br>
-                            <textarea name="source" rows="5" cols="50">
+            <!-- ===================FORM STARTS HERE ====================== -->
+
+            <form action="/quotes" method="post" id="form2">
+              <input type="text" name="quote" placeholder='"Quote"' />
+              <br>
+              <textarea name="source" rows="5" cols="50">
                                -Source
                                 </textarea>
-                        
-                          </form>
-                        
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary" form="form2">Post</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
+            </form>
 
-        <div class="icon-container">
-                <img src="img/link.png" height="30px">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" form="form2">Post</button>
+          </div>
         </div>
-        <div class="icon-container">
-                <img src="img/chat.png" height="30px">
-        </div>
-        <div class="icon-container">
-                <img src="img/music.png" height="30px">
-        </div>
-        <div class="icon-container">
-                <img src="img/video.png" height="30px">
-        </div>
-        </div>
+      </div>
     </div>
 
-<div class="dashboard-content">
+
+    <div class="icon-container">
+      <img src="img/link.png" height="30px">
+    </div>
+    <div class="icon-container">
+      <img src="img/chat.png" height="30px">
+    </div>
+    <div class="icon-container">
+      <img src="img/music.png" height="30px">
+    </div>
+    <div class="icon-container">
+      <img src="img/video.png" height="30px">
+    </div>
+  </div>
+</div>
+
+  <div class="dashboard-content">
     <main>{{{postsHTML}}}</main>
     <div class="recommended-blogs-container">
-        <h4 class="rec-blogs-title">Recommended blogs</h4>
-        <section>{{{ recommendedHTML }}}</section>
+      <h4 class="rec-blogs-title">Recommended blogs</h4>
+      <section>{{{ recommendedHTML }}}</section>
     </div>
-</div>
-    <!-- ===================== Facebook OAuth Strategy=====================-->
+  </div>
+  <!-- ===================== Facebook OAuth Strategy=====================-->
   <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : 714303202382978,
-          cookie     : true,
-          xfbml      : true,
-          version    : 4.0
-        });
-          
-        FB.AppEvents.logPageView();   
-          
-      };
-    
-      (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-    </script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: 714303202382978,
+        cookie: true,
+        xfbml: true,
+        version: 4.0
+      });
+
+      FB.AppEvents.logPageView();
+
+    };
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function deletePost(id) {
+      // console.log(id)
+      $.ajax({
+        url: '/posts',
+        type: 'DELETE',
+        data: {
+          id: id
+        },
+        success: function (result) {
+          location.reload()
+          // Do something with the result
+        }
+      })
+    }
+  </script>
 
 </body>
+
 </html>

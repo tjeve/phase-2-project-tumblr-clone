@@ -41,12 +41,12 @@ app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
   console.log('user information >>> ', req.user)
-  // if (!req.user) {
-  //   res.redirect('/auth')
-  // } else {
+  if (!req.user) {
+    res.redirect('/auth')
+  } else {
     getAllItemsPosted()
       // The Promise
-      .then(function (allPosts) { 
+      .then(function (allPosts) {
         // console.log(allPosts)
         // When the Promise is received
         // console.log(allPosts.rows)
@@ -71,7 +71,7 @@ app.get('/', function (req, res) {
       })
     // }
   }
-)
+})
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -110,19 +110,18 @@ app.get('/search', function (req, res) {
   getSearchedForContent(req.query.search)
     .then(function (results) {
       // console.log(results.rows, "<-- These are your results")
-      // res.send('got' + JSON.stringify(req.query.search) ) 
-      res.send( //see if you can get results.fields to render on the homepage
+      // res.send('got' + JSON.stringify(req.query.search) )
+      res.send( // see if you can get results.fields to render on the homepage
         mustache.render(searchResultsTemplate, {
           resultsHTML: renderPosts(results.rows)
         })
       )
     })
-    .catch(function() {
+    .catch(function () {
       res.status(500).send('Not able to find searched term')
     })
   // res.send('got' + JSON.stringify(req.query.search)) // sends what is entered in the search bar on the homepage to the screen.
-  })
-
+})
 
 // POST new quote post
 
@@ -138,13 +137,12 @@ app.post('/quotes', function (req, res) {
     })
 })
 
-//DELETE post
+// DELETE post
 
 app.delete('/posts', function (req, res) {
-  deletePost(req.body.id) 
-  .then(function (post) {
+  deletePost(req.body.id).then(function (post) {
     // res.redirect(303, '/')
-    res.end();
+    res.end()
     // res.send(
     //   mustache.render(homepageTemplate, {
     //     postsHTML: renderPosts(allPosts.rows)
@@ -153,7 +151,7 @@ app.delete('/posts', function (req, res) {
   })
   // console.log('jhuh', req.body)
   // res.send('hy')
-}) 
+})
 
 // --------------------------------------------------------------------------
 // database Queries and Functions
@@ -168,14 +166,14 @@ FROM "Users"
 // `
 
 function deletePost (id) {
-  return db.raw('DELETE FROM "Posts" WHERE id = ?', [id])
-  .then(function (results) {
-    if (results.rowCount === 0) {
-      throw null
-    } else {
-      return
-    }
-  })
+  return db
+    .raw('DELETE FROM "Posts" WHERE id = ?', [id])
+    .then(function (results) {
+      if (results.rowCount === 0) {
+        return null
+      } else {
+      }
+    })
 }
 
 function getAllItemsPosted () {
@@ -194,20 +192,16 @@ function getAllThingsPosted () {
   )
 }
 
-
 function getRecommendedUsers () {
   return db.raw('SELECT * FROM "Users" ORDER BY RANDOM() LIMIT 4')
 }
 
 function getSearchedForContent (searchedWord) {
   const term = '%' + searchedWord + '%'
-  
-  //Raw
-  return db.raw(
-    `SELECT * FROM "Posts" WHERE "postedMessage" LIKE ?`, [term]
-  )
-}
 
+  // Raw
+  return db.raw('SELECT * FROM "Posts" WHERE "postedMessage" LIKE ?', [term])
+}
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
@@ -223,7 +217,9 @@ function renderPosts (post) {
 } alt="" width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
-            <div class="notes-container"> ${postObject.numberOfNotes} notes </div>
+            <div class="notes-container"> ${
+  postObject.numberOfNotes
+} notes </div>
               <div class="btn-container">
                 <button id="delete-btn" onClick="
 
@@ -240,7 +236,9 @@ function renderPosts (post) {
       <div class="post-container">
         <img src=${postObject.userImage} alt="" height="60" width="60">
         <div class="content-container">
-         <div class="quote-container"> <span class=quote>"</span><h2>${postObject.quote}</h2> <span class=quote>"</span> </div>
+         <div class="quote-container"> <span class=quote>"</span><h2>${
+  postObject.quote
+}</h2> <span class=quote>"</span> </div>
           ${postObject.source}
           <div class="post-footer">
           <div class="notes-container">${postObject.numberOfNotes} notes </div>
