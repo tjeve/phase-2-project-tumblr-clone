@@ -14,8 +14,11 @@ This is a backend project that utilizes backend and database technologies such a
 **Available Scripts**
 
 In the project directory, you can run:
-`npm run deploy`
-in your terminal which deploys the application to Surge. 
+`npm run deploy` in install node modules folder, 
+`npx knex migrate:latest` to install most recent database schema,
+`npx knex seed:run` to initialize database, and
+`npm start` to start express.js server on port 4000
+
 
 ## Features
 
