@@ -1,7 +1,5 @@
 # Phase-2-Project-tumblr-clone
 
-[![Build Status](https://travis-ci.org/jjdelacruz1/Phase1Project.svg?branch=master)](https://travis-ci.org/jjdelacruz1/Phase1Project)
-
 This is a backend project that utilizes backend and database technologies such as Express, Knex, and Postgres to make a clone of the popular blogging website, Tumblr.
 
 ## Technologies Used
