@@ -125,6 +125,16 @@ input[type=text], select {
     resize: none;
   }
 
+  .quote-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+  }
+
+  .quote {
+      font-size: 28pt;
+  }
+
   .dashboard-content {
       /* border: solid 1px red; */
       background-color: #001936;

@@ -51,7 +51,7 @@ app.get('/', function (req, res) {
         console.log('Your seed data should show up here') // console log this message
         // res.send(allPosts.rows) // then send back the rows full of data from your database
 
-        getAllUsers().then(function (allUsers) {
+        getRecommendedUsers().then(function (allUsers) {
           res.send(
             mustache.render(homepageTemplate, {
               postsHTML: renderPosts(allPosts.rows),
@@ -220,9 +220,9 @@ function getAllThingsPosted () {
   )
 }
 
-// function getRecommendedUsers () {
-//   return db.raw('SELECT * FROM "Users" ORDER BY name limit 4')
-// }
+function getRecommendedUsers () {
+  return db.raw('SELECT * FROM "Users" ORDER BY RANDOM() LIMIT 4')
+}
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
@@ -253,10 +253,17 @@ function renderPosts (post) {
       <div class="post-container">
         <img src=${postObject.userImage} alt="" height="60" width="60">
         <div class="content-container">
-          "<h2>${postObject.quote}</h2>"
+         <div class="quote-container"> <span class=quote>"</span><h2>${postObject.quote}</h2> <span class=quote>"</span> </div>
           ${postObject.source}
           <div class="post-footer">
-            ${postObject.numberOfNotes} notes
+          <div class="notes-container">${postObject.numberOfNotes} notes </div>
+          <div class="btn-container">
+          <button id="delete-btn" onClick="
+
+          deletePost(${postObject.id})            
+          ">
+          <img src="img/garbage.svg" width="20px"></button>
+        </div>
           </div>
         </div>
       </div>
@@ -270,7 +277,8 @@ function renderPosts (post) {
           <h2>${postObject.title}</h2>
           ${postObject.postedMessage}
           <div class="post-footer">
-            ${postObject.numberOfNotes} notes
+          <div class="notes-container"> ${postObject.numberOfNotes} notes </div>
+          
             <div class="btn-container">
             <button id="delete-btn" onClick="
 
