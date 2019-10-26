@@ -90,6 +90,9 @@ input {
 }
 
 .post-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     padding: 15px 10px 0px 10px;
     font-weight: 500;
 }
@@ -112,16 +115,35 @@ input[type=text], select {
     box-sizing: border-box;
   }
 
-textarea {
-text-align: left;
-width: 90%;
-height: 150px;
-padding: 12px 20px;
-box-sizing: border-box;
-border: none;
-font-size: 16px;
-resize: none;
-}
+  textarea {
+    text-align: left;
+    width: 90%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: none;
+    font-size: 16px;
+    resize: none;
+  }
+
+  .quote-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+  }
+
+  .quote {
+      font-size: 28pt;
+  }
+
+  .dashboard-content {
+      /* border: solid 1px red; */
+      background-color: #001936;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+
+  } 
 
 .dashboard-content {
     /* border: solid 1px red; */
@@ -129,8 +151,24 @@ resize: none;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+}
+  .rec-blogs-title {
+      color: white; 
+  }
 
-} 
+  .rec-username {
+      color: white; 
+  }
+
+  .rec-text {
+    /* border: solid 1px red; */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* width: 50%; */
+  }
+
+
 
 
 .navbar-default {
