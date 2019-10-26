@@ -2,9 +2,13 @@ const fs = require('fs')
 const express = require('express')
 const app = express()
 const dbConfigs = require('./knexfile.js')
-const db = require('knex')(dbConfigs.development)
+const environment = process.env.NODE_ENV || 'development'
+const config =
+  environment === 'production' ? dbConfigs.production : dbConfigs.development
+const db = require('knex')(config)
 const mustache = require('mustache')
 const path = require('path')
+const knex = require('knex')({client: 'pg'})
 
 // ========== Express Session ==========
 const session = require('express-session')
@@ -29,19 +33,18 @@ app.use(express.urlencoded({ extended: true }))
 //   getAllPostsFromOneUser
 // } = require('./src/db/posts.js')
 
-const port = 4000
-// -----------------------------------------------------------d---------------
+const port = process.env.PORT || 4000
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
-// const successTemplate = fs.readFileSync('./templates/success.mustache', 'utf8')
+const searchResultsTemplate = fs.readFileSync('./templates/search-results.html', 'utf8')
 
 app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
   console.log('user information >>> ', req.user)
-  if (!req.user) {
-    res.redirect('/auth')
-  } else {
+  // if (!req.user) {
+  //   res.redirect('/auth')
+  // } else {
     getAllItemsPosted()
       // The Promise
       .then(function (allPosts) {
@@ -68,23 +71,7 @@ app.get('/', function (req, res) {
         res.status(500).send('No Posts found')
       })
   }
-})
-
-// GET Recommended posts
-
-// app.get('/', function (req, res) {
-//   getAllUsers()
-//     .then(function (allUsers) {
-//       res.send(
-//         mustache.render(homepageTemplate, {
-//           recommendedHTML: renderRecommendedUsers(allUsers.rows)
-//         })
-//       )
-//     })
-//     .catch(function () {
-//       res.status(500).send('No Users found')
-//     })
-// })
+)
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -119,23 +106,22 @@ app.post('/posts', function (req, res) {
 // Get Searched For Content
 
 app.get('/search', function (req, res) {
-  console.log(req.query.search, '<-- This is req.body') // console logs what you searched for.
-  // getSearchedForContent(req.query.search)
-  getSearchedForContent(req.query.search).then(function () {
-    res.send()
+  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
+  getSearchedForContent(req.query.search)
+    .then(function (results) {
+      // console.log(results.rows, "<-- These are your results")
+      res.send( //see if you can get results.fields to render on the homepage
+        mustache.render(searchResultsTemplate, {
+          resultsHTML: renderPosts(results.rows)
+        })
+      )
+    })
+    .catch(function() {
+      res.status(500).send('Not able to find searched term')
+    })
+  // res.send('got' + JSON.stringify(req.query.search)) // sends what is entered in the search bar on the homepage to the screen.
   })
-  res.send('got' + JSON.stringify(req.query.search)) // sends what is entered in the search bar on the homepage to the screen.
 
-  createPost(req.body).then(function () {
-    getAllThingsPosted()
-      .then(function (allPosts) {
-        res.redirect('/')
-      })
-      .catch(function () {
-        res.status(500).send('No Posts found')
-      })
-  })
-})
 
 // POST new quote post
 
@@ -153,16 +139,17 @@ app.post('/quotes', function (req, res) {
 
 // Get Searched For Content
 
-app.get('/search', function (req, res) {
-  // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
-  // getSearchedForContent(req.query.search)
-  getSearchedForContent(req.query.search).then(function (results) {
-    console.log(results.rows)
-    res.send('hello')
-  })
-  // sends what is entered in the search bar on the homepage to the screen.
-  // res.send('got' + JSON.stringify(req.query.search) )
-})
+// app.get('/search', function (req, res) {
+//   // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
+//   // getSearchedForContent(req.query.search)
+//   getSearchedForContent(req.query.search)
+//     .then(function (results) {
+//       console.log(results.rows)
+//       res.send(results.rows)
+//     })
+// // sends what is entered in the search bar on the homepage to the screen.
+// // res.send('got' + JSON.stringify(req.query.search) ) 
+// })
 
 //DELETE post
 
@@ -220,9 +207,20 @@ function getAllThingsPosted () {
   )
 }
 
+
 function getRecommendedUsers () {
   return db.raw('SELECT * FROM "Users" ORDER BY RANDOM() LIMIT 4')
 }
+
+function getSearchedForContent (searchedWord) {
+  const term = '%' + searchedWord + '%'
+  
+  //Raw
+  return db.raw(
+    `SELECT * FROM "Posts" WHERE "postedMessage" LIKE ?`, [term]
+  )
+}
+
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
@@ -233,7 +231,9 @@ function renderPosts (post) {
   postObject.userImage
 } height="60" width="59" alt=""></div>
         <div class="img-post-container">
-          <img class="posted-img" src=${postObject.postedImage} alt="" width="500">
+          <img class="posted-img" src=${
+  postObject.postedImage
+} alt="" width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
             <div class="notes-container"> ${postObject.numberOfNotes} notes </div>

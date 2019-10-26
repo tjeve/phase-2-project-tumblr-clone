@@ -1,3 +1,4 @@
+
 main {
     background-color: #001936;
 }
@@ -144,24 +145,13 @@ input[type=text], select {
 
   } 
 
-.navbar-default {
+.dashboard-content {
+    /* border: solid 1px red; */
     background-color: #001936;
-    background-image: none;
-    background-repeat: no-repeat;
-   }
-
-  .rec-container {
-      display: flex;
-      flex-direction: row;
-      /* flex-wrap: wrap; */
-      align-self: center;
-      justify-content: space-between; 
-      border-top: grey 1px solid;
-      padding-top: 5px;
-/*    
-      border: solid 1px pink; */
-  }
-
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
   .rec-blogs-title {
       color: white; 
   }
@@ -178,36 +168,62 @@ input[type=text], select {
       /* width: 50%; */
   }
 
-  .tagline {
-    font-size: 11pt;
-    color: grey;
-  }
 
-  .rec-img {
+
+
+.navbar-default {
+background-color: #001936;
+background-image: none;
+background-repeat: no-repeat;
+}
+.rec-container {
+display: flex;
+flex-direction: row;
+/* flex-wrap: wrap; */
+align-self: center;
+justify-content: space-between; 
+border-top: grey 1px solid;
+padding-top: 5px;
+/*border: solid 1px pink; */
+}
+
+.rec-text {
+/* border: solid 1px red; */
     display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-right: 10px;
-
-  }
-
-  .sectionthatisnoticon {
-      display: flex;
-      flex-direction: wrap;
-  }
-  
-  section {
-      /* border: solid 1px red; */
-      width: 70%;
-     
-  }
-
-  .rec-icon-container {
-    display: flex; 
-    float: right;
     flex-direction: column;
-    /* border: solid 1px red; */
-    
-     justify-content: center;
-  }
+    justify-content: center;
+    /* width: 50%; */
+}
 
+.tagline {
+font-size: 11pt;
+color: grey;
+}
+
+.rec-img {
+display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 10px;
+
+}
+
+.sectionthatisnoticon {
+    display: flex;
+    flex-direction: wrap;
+}
+
+section {
+    /* border: solid 1px red; */
+    width: 70%;
+    
+}
+
+.rec-icon-container {
+display: flex; 
+float: right;
+flex-direction: column;
+/* border: solid 1px red; */
+
+justify-content: center;
+}
