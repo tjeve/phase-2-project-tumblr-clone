@@ -227,3 +227,7 @@ flex-direction: column;
 
 justify-content: center;
 }
+
+.nav-link {
+    color: white;
+}
