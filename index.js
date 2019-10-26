@@ -8,7 +8,6 @@ const config =
 const db = require('knex')(config)
 const mustache = require('mustache')
 const path = require('path')
-// const knex = require('knex')({ client: 'pg' })
 
 // ========== Express Session ==========
 const session = require('express-session')
@@ -35,11 +34,8 @@ app.use(express.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 4000
 // Express.js Endpoints
-const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
-const searchResultsTemplate = fs.readFileSync(
-  './templates/search-results.html',
-  'utf8'
-)
+const homepageTemplate = fs.readFileSync('./templates/homepage.mustache', 'utf8')
+const searchResultsTemplate = fs.readFileSync('./templates/search-results.mustache', 'utf8')
 
 app.use('/', express.static(path.join(__dirname, '/public')))
 
@@ -54,7 +50,7 @@ app.get('/', function (req, res) {
         // console.log(allPosts)
         // When the Promise is received
         // console.log(allPosts.rows)
-        console.log('Your seed data should show up here') // console log this message
+        // console.log('Your seed data should show up here') // console log this message
         // res.send(allPosts.rows) // then send back the rows full of data from your database
 
         getRecommendedUsers().then(function (allUsers) {
@@ -73,6 +69,7 @@ app.get('/', function (req, res) {
       .catch(function () {
         res.status(500).send('No Posts found')
       })
+    // }
   }
 })
 
@@ -113,8 +110,8 @@ app.get('/search', function (req, res) {
   getSearchedForContent(req.query.search)
     .then(function (results) {
       // console.log(results.rows, "<-- These are your results")
-      res.send(
-        // see if you can get results.fields to render on the homepage
+      // res.send('got' + JSON.stringify(req.query.search) )
+      res.send( // see if you can get results.fields to render on the homepage
         mustache.render(searchResultsTemplate, {
           resultsHTML: renderPosts(results.rows)
         })
@@ -139,20 +136,6 @@ app.post('/quotes', function (req, res) {
       res.status(500).send('Not able to create new post')
     })
 })
-
-// Get Searched For Content
-
-// app.get('/search', function (req, res) {
-//   // console.log(req.query.search, '<-- This is req.query.search') // console logs what you searched for.
-//   // getSearchedForContent(req.query.search)
-//   getSearchedForContent(req.query.search)
-//     .then(function (results) {
-//       console.log(results.rows)
-//       res.send(results.rows)
-//     })
-// // sends what is entered in the search bar on the homepage to the screen.
-// // res.send('got' + JSON.stringify(req.query.search) )
-// })
 
 // DELETE post
 
