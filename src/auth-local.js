@@ -24,44 +24,48 @@ module.exports = function (app, passport) {
   const LocalStrategy = require('passport-local').Strategy
 
   passport.use(
-    new LocalStrategy({
-      usernameField: 'email',
-      passwordField: 'password'
-    }, function (email, password, done) {
-      getOneUser({ email: email })
-        .then(function (userArray) {
-          if (userArray.length === 0) {
-            // console.error('User is not found')
-            return done('User is not found!!!')
-          } else {
-            const user = userArray[0]
-            bcrypt.compare(password, user.password, function (
-              err,
-              authResponse
-            ) {
-              if (err) console.error(err)
-              if (authResponse) {
-                return done(null, user)
-              } else {
-                return done('User validation failed', user.email)
-              }
-            })
-            // console.log(user)
-          }
-        })
-        .catch(function (err) {
-          console.error('Error on database')
-          return done(err)
-        })
-    })
+    new LocalStrategy(
+      {
+        usernameField: 'email',
+        passwordField: 'password'
+      },
+      function (email, password, done) {
+        getOneUser({ email: email })
+          .then(function (userArray) {
+            if (userArray.length === 0) {
+              // console.error('User is not found')
+              return done(null)
+            } else {
+              const user = userArray[0]
+              bcrypt.compare(password, user.password, function (
+                err,
+                authResponse
+              ) {
+                if (err) console.error(err)
+                if (authResponse) {
+                  return done(null, user)
+                } else {
+                  return done(null)
+                }
+              })
+              // console.log(user)
+            }
+          })
+          .catch(function (err) {
+            console.error('Error on database')
+            return done(err)
+          })
+      }
+    )
   )
 
   app.post(
     '/auth/local',
-    passport.authenticate('local', { failureRedirect: '/auth/local-error' }),
-    function (req, res) {
-      res.redirect('/')
-    }
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/auth?error=1',
+      failureFlash: false
+    })
   )
 
   app.get('/register', function (req, res) {
