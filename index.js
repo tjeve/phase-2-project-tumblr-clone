@@ -45,34 +45,35 @@ app.use('/', express.static(path.join(__dirname, '/public')))
 
 app.get('/', function (req, res) {
   console.log('user information >>> ', req.user)
-  // if (!req.user) {
-  //   res.redirect('/auth')
-  // } else {
-  getAllItemsPosted()
-    // The Promise
-    .then(function (allPosts) {
-      // console.log(allPosts)
-      // When the Promise is received
-      // console.log(allPosts.rows)
-      console.log('Your seed data should show up here') // console log this message
-      // res.send(allPosts.rows) // then send back the rows full of data from your database
+  if (!req.user) {
+    res.redirect('/auth')
+  } else {
+    getAllItemsPosted()
+      // The Promise
+      .then(function (allPosts) {
+        // console.log(allPosts)
+        // When the Promise is received
+        // console.log(allPosts.rows)
+        console.log('Your seed data should show up here') // console log this message
+        // res.send(allPosts.rows) // then send back the rows full of data from your database
 
-      getRecommendedUsers().then(function (allUsers) {
-        res.send(
-          mustache.render(homepageTemplate, {
-            postsHTML: renderPosts(allPosts.rows),
-            recommendedHTML: renderRecommendedUsers(allUsers.rows)
-          })
-        )
+        getRecommendedUsers().then(function (allUsers) {
+          res.send(
+            mustache.render(homepageTemplate, {
+              postsHTML: renderPosts(allPosts.rows),
+              recommendedHTML: renderRecommendedUsers(allUsers.rows)
+            })
+          )
+        })
+
+        // Mustache is working! But why is everything undefined?
+        // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
+        // res.send(allPosts.rows)
       })
-
-      // Mustache is working! But why is everything undefined?
-      // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
-      // res.send(allPosts.rows)
-    })
-    .catch(function () {
-      res.status(500).send('No Posts found')
-    })
+      .catch(function () {
+        res.status(500).send('No Posts found')
+      })
+  }
 })
 
 app.listen(port, function () {
