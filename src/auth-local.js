@@ -24,8 +24,11 @@ module.exports = function (app, passport) {
   const LocalStrategy = require('passport-local').Strategy
 
   passport.use(
-    new LocalStrategy(function (username, password, done) {
-      getOneUser({ email: username })
+    new LocalStrategy({
+      usernameField: 'email',
+      passwordField: 'password'
+    }, function (email, password, done) {
+      getOneUser({ email: email })
         .then(function (userArray) {
           if (userArray.length === 0) {
             // console.error('User is not found')
