@@ -89,6 +89,9 @@ input {
 }
 
 .post-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     padding: 15px 10px 0px 10px;
     font-weight: 500;
 }
@@ -147,6 +150,14 @@ input[type=text], select {
       padding-top: 5px;
 /*    
       border: solid 1px pink; */
+  }
+
+  .rec-blogs-title {
+      color: white; 
+  }
+
+  .rec-username {
+      color: white; 
   }
 
   .rec-text {

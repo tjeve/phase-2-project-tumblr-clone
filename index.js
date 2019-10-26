@@ -164,6 +164,23 @@ app.get('/search', function (req, res) {
   // res.send('got' + JSON.stringify(req.query.search) )
 })
 
+//DELETE post
+
+app.delete('/posts', function (req, res) {
+  deletePost(req.body.id) 
+  .then(function (post) {
+    // res.redirect(303, '/')
+    res.end();
+    // res.send(
+    //   mustache.render(homepageTemplate, {
+    //     postsHTML: renderPosts(allPosts.rows)
+    //   })
+    // )
+  })
+  // console.log('jhuh', req.body)
+  // res.send('hy')
+}) 
+
 // --------------------------------------------------------------------------
 // database Queries and Functions
 
@@ -175,6 +192,17 @@ FROM "Users"
 // SELECT *
 // FROM "Posts"
 // `
+
+function deletePost (id) {
+  return db.raw('DELETE FROM "Posts" WHERE id = ?', [id])
+  .then(function (results) {
+    if (results.rowCount === 0) {
+      throw null
+    } else {
+      return
+    }
+  })
+}
 
 function getAllItemsPosted () {
   return db.raw(
@@ -208,7 +236,15 @@ function renderPosts (post) {
           <img class="posted-img" src=${postObject.postedImage} alt="" width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
-             ${postObject.numberOfNotes} notes
+            <div class="notes-container"> ${postObject.numberOfNotes} notes </div>
+              <div class="btn-container">
+                <button id="delete-btn" onClick="
+
+                deletePost(${postObject.id})            
+                ">
+                <img src="img/garbage.svg" width="20px"></button>
+              </div>
+           
           </div>
         </div>
       </div>`
@@ -235,6 +271,13 @@ function renderPosts (post) {
           ${postObject.postedMessage}
           <div class="post-footer">
             ${postObject.numberOfNotes} notes
+            <div class="btn-container">
+            <button id="delete-btn" onClick="
+
+            deletePost(${postObject.id})            
+            ">
+            <img src="img/garbage.svg" width="20px"></button>
+          </div>
           </div>
         </div>
     
@@ -274,7 +317,7 @@ function renderRecommendedUsers (user) {
 } height="41" width="41">
       </div>
       <div class="rec-text">
-        <h6 class="username">${userObject.name}</h6>
+        <h6 class="rec-username">${userObject.name}</h6>
         <p class="tagline">${userObject.tagline}</p>
       </div>
       </div>
