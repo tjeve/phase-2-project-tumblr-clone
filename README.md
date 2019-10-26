@@ -32,7 +32,6 @@ In the project directory, you can run these scripts in the following order:
 
 - Creating tables using migration and seeds and 
 - Querying data from a database
-- Resolve merge conflicts
 
 ### Collaborators
 * [Sue Park](https://github.com/suepark09)
