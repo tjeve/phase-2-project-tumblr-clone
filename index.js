@@ -8,7 +8,7 @@ const config =
 const db = require('knex')(config)
 const mustache = require('mustache')
 const path = require('path')
-const knex = require('knex')({client: 'pg'})
+// const knex = require('knex')({ client: 'pg' })
 
 // ========== Express Session ==========
 const session = require('express-session')
@@ -36,7 +36,10 @@ app.use(express.urlencoded({ extended: true }))
 const port = process.env.PORT || 4000
 // Express.js Endpoints
 const homepageTemplate = fs.readFileSync('./templates/homepage.html', 'utf8')
-const searchResultsTemplate = fs.readFileSync('./templates/search-results.html', 'utf8')
+const searchResultsTemplate = fs.readFileSync(
+  './templates/search-results.html',
+  'utf8'
+)
 
 app.use('/', express.static(path.join(__dirname, '/public')))
 
@@ -45,33 +48,32 @@ app.get('/', function (req, res) {
   // if (!req.user) {
   //   res.redirect('/auth')
   // } else {
-    getAllItemsPosted()
-      // The Promise
-      .then(function (allPosts) {
-        // console.log(allPosts)
-        // When the Promise is received
-        // console.log(allPosts.rows)
-        console.log('Your seed data should show up here') // console log this message
-        // res.send(allPosts.rows) // then send back the rows full of data from your database
+  getAllItemsPosted()
+    // The Promise
+    .then(function (allPosts) {
+      // console.log(allPosts)
+      // When the Promise is received
+      // console.log(allPosts.rows)
+      console.log('Your seed data should show up here') // console log this message
+      // res.send(allPosts.rows) // then send back the rows full of data from your database
 
-        getRecommendedUsers().then(function (allUsers) {
-          res.send(
-            mustache.render(homepageTemplate, {
-              postsHTML: renderPosts(allPosts.rows),
-              recommendedHTML: renderRecommendedUsers(allUsers.rows)
-            })
-          )
-        })
+      getRecommendedUsers().then(function (allUsers) {
+        res.send(
+          mustache.render(homepageTemplate, {
+            postsHTML: renderPosts(allPosts.rows),
+            recommendedHTML: renderRecommendedUsers(allUsers.rows)
+          })
+        )
+      })
 
-        // Mustache is working! But why is everything undefined?
-        // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
-        // res.send(allPosts.rows)
-      })
-      .catch(function () {
-        res.status(500).send('No Posts found')
-      })
-  }
-)
+      // Mustache is working! But why is everything undefined?
+      // res.send((renderPosts(allPosts.rows))) //Wow! But why is everything undefined?
+      // res.send(allPosts.rows)
+    })
+    .catch(function () {
+      res.status(500).send('No Posts found')
+    })
+})
 
 app.listen(port, function () {
   console.log('Listening on port ' + port + ' 👍')
@@ -110,18 +112,18 @@ app.get('/search', function (req, res) {
   getSearchedForContent(req.query.search)
     .then(function (results) {
       // console.log(results.rows, "<-- These are your results")
-      res.send( //see if you can get results.fields to render on the homepage
+      res.send(
+        // see if you can get results.fields to render on the homepage
         mustache.render(searchResultsTemplate, {
           resultsHTML: renderPosts(results.rows)
         })
       )
     })
-    .catch(function() {
+    .catch(function () {
       res.status(500).send('Not able to find searched term')
     })
   // res.send('got' + JSON.stringify(req.query.search)) // sends what is entered in the search bar on the homepage to the screen.
-  })
-
+})
 
 // POST new quote post
 
@@ -148,16 +150,15 @@ app.post('/quotes', function (req, res) {
 //       res.send(results.rows)
 //     })
 // // sends what is entered in the search bar on the homepage to the screen.
-// // res.send('got' + JSON.stringify(req.query.search) ) 
+// // res.send('got' + JSON.stringify(req.query.search) )
 // })
 
-//DELETE post
+// DELETE post
 
 app.delete('/posts', function (req, res) {
-  deletePost(req.body.id) 
-  .then(function (post) {
+  deletePost(req.body.id).then(function (post) {
     // res.redirect(303, '/')
-    res.end();
+    res.end()
     // res.send(
     //   mustache.render(homepageTemplate, {
     //     postsHTML: renderPosts(allPosts.rows)
@@ -166,7 +167,7 @@ app.delete('/posts', function (req, res) {
   })
   // console.log('jhuh', req.body)
   // res.send('hy')
-}) 
+})
 
 // --------------------------------------------------------------------------
 // database Queries and Functions
@@ -181,14 +182,14 @@ FROM "Users"
 // `
 
 function deletePost (id) {
-  return db.raw('DELETE FROM "Posts" WHERE id = ?', [id])
-  .then(function (results) {
-    if (results.rowCount === 0) {
-      throw null
-    } else {
-      return
-    }
-  })
+  return db
+    .raw('DELETE FROM "Posts" WHERE id = ?', [id])
+    .then(function (results) {
+      if (results.rowCount === 0) {
+        return null
+      } else {
+      }
+    })
 }
 
 function getAllItemsPosted () {
@@ -207,20 +208,16 @@ function getAllThingsPosted () {
   )
 }
 
-
 function getRecommendedUsers () {
   return db.raw('SELECT * FROM "Users" ORDER BY RANDOM() LIMIT 4')
 }
 
 function getSearchedForContent (searchedWord) {
   const term = '%' + searchedWord + '%'
-  
-  //Raw
-  return db.raw(
-    `SELECT * FROM "Posts" WHERE "postedMessage" LIKE ?`, [term]
-  )
-}
 
+  // Raw
+  return db.raw('SELECT * FROM "Posts" WHERE "postedMessage" LIKE ?', [term])
+}
 
 function renderPosts (post) {
   function createSinglePostHTML (postObject) {
@@ -236,7 +233,9 @@ function renderPosts (post) {
 } alt="" width="500">
           <div class="posted-message">${postObject.postedMessage}</div>
           <div class="post-footer">
-            <div class="notes-container"> ${postObject.numberOfNotes} notes </div>
+            <div class="notes-container"> ${
+  postObject.numberOfNotes
+} notes </div>
               <div class="btn-container">
                 <button id="delete-btn" onClick="
 
@@ -253,7 +252,9 @@ function renderPosts (post) {
       <div class="post-container">
         <img src=${postObject.userImage} alt="" height="60" width="60">
         <div class="content-container">
-         <div class="quote-container"> <span class=quote>"</span><h2>${postObject.quote}</h2> <span class=quote>"</span> </div>
+         <div class="quote-container"> <span class=quote>"</span><h2>${
+  postObject.quote
+}</h2> <span class=quote>"</span> </div>
           ${postObject.source}
           <div class="post-footer">
           <div class="notes-container">${postObject.numberOfNotes} notes </div>
