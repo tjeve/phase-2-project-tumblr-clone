@@ -3,13 +3,20 @@
 This is a backend project that utilizes backend and database technologies such as Express, Knex, and Postgres to make a clone of the popular blogging website Tumblr.
 
 ## Technologies Used
+| Technology                                                    | Purpose                                                                                                                                                              |
+|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Knex.js](http://knexjs.org/)                                 | A "batteries included" SQL query builder for Postgres, MSSQL, MySQL, MariaDB, SQLite3, Oracle, and Amazon Redshift designed to be flexible, portable, and fun to use |
+| [Node.js](https://nodejs.org/en/)                             | Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.                                                                                             |
+| [Express](https://expressjs.com/)                             | A node.js web application framework used to develop features for our web application                                                                                 |
+| [Passport.js](http://www.passportjs.org/)                     | Passport.js was used to develop a local strategy for authentication.                                                                                                 |
+| [Mustache.js](https://mustache.github.io/)                    | Mustache.js is a logic-less templating system we used for creating the HTML for our site.                                                                            |
+| [PostgreSQL](https://www.postgresql.org/)                     | PostgreSQL as our database to store data                                                                                                                             |
+| [Postico](https://eggerapps.at/postico/)                      | A PostgreSQL client for macbooks                                                                                                                                     |
+| [Passport-facebook](http://www.passportjs.org/docs/facebook/) | Passport-facebook was used as a secondary authentication strategy                                                                                                    |
 
-- Knex.js for database seeding and migrations
-- Node.js for server operations
-- Express for server operations
-- Passport.js for authentication
-- Mustache.js for templating
-- PostgreSQL for the database
+# Getting Started
+
+Clone this repository, install the technologies above. 
 
 **Available Scripts**
 
