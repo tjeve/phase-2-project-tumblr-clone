@@ -37,7 +37,7 @@ In the project directory, you can run these scripts in the following order:
 
 ## What We Learned
 
-- Creating tables using migration and seeds and 
+- Creating tables using migration and seeds 
 - Querying data from a database
 - Creating templates for html
 
