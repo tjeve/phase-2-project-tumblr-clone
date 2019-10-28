@@ -1,13 +1,15 @@
 # Phase-2-Project-tumblr-clone
 
-This is a backend project that utilizes backend and database technologies such as Express, Knex, and Postgres to make a clone of the popular blogging website, Tumblr.
+This is a backend project that utilizes backend and database technologies such as Express, Knex, and Postgres to make a clone of the popular blogging website Tumblr.
 
 ## Technologies Used
 
-- Knex.js
-- Node.js
-- Express
-- Mustache Template system
+- Knex.js for database seeding and migrations
+- Node.js for server operations
+- Express for server operations
+- Passport.js for authentication
+- Mustache.js for templating
+- PostgreSQL for the database
 
 **Available Scripts**
 
@@ -30,6 +32,7 @@ In the project directory, you can run these scripts in the following order:
 
 - Creating tables using migration and seeds and 
 - Querying data from a database
+- Creating templates for html
 
 ### Collaborators
 * [Sue Park](https://github.com/suepark09)
