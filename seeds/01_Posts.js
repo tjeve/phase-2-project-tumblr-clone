@@ -8,8 +8,10 @@ exports.seed = function (knex) {
       fakeData.push({
         userId: j + 1,
         title: faker.lorem.sentence(),
-        postedImage: `${faker.random.image()}?random=${faker.random.number() *
-          faker.random.number()}`.replace(/^http/g, 'https'),
+        postedImage: `https://picsum.photos/500?random=${faker.random.number() *
+          faker.random.number()}`,
+        // postedImage: `${faker.random.image()}?random=${faker.random.number() *
+        //   faker.random.number()}`.replace(/^http/g, 'https'),
         numberOfNotes: faker.random.number(),
         date: faker.date.past(10),
         postedMessage: faker.lorem.text()
