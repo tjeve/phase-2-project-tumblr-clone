@@ -3,12 +3,16 @@ module.exports = function (app, passport) {
   //   const passport = require('passport')
 
   const FacebookStrategy = require('passport-facebook').Strategy
+  const callbackURL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://digitalcrafts-tumblr-clone.herokuapp.com/auth/facebook/callback'
+      : '/auth/facebook/callback'
   passport.use(
     new FacebookStrategy(
       {
         clientID: 714303202382978,
         clientSecret: 'd73be09f0889564f3ed3c19017e32249',
-        callbackURL: 'https://digitalcrafts-tumblr-clone.herokuapp.com/'
+        callbackURL: callbackURL
       },
       function (accessToken, refereshToken, profile, cb) {
         return cb(null, profile)

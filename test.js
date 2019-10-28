@@ -11,7 +11,9 @@ for (let j = 0; j < userCount; j++) {
     name: fakerName,
     userImage: faker.image.avatar(),
     slug: fakerSlug,
-    tagline: faker.lorem.sentence()
+    tagline: faker.lorem.sentence(),
+    postedImage: `${faker.random.image()}?random=${faker.random.number() *
+      faker.random.number()}`.replace(/^http/g, 'https')
   })
 }
 
