@@ -21,7 +21,7 @@ Clone this repository, install the technologies above.
 **Available Scripts**
 
 In the project directory, you can run these scripts in the following order:
-`npm run deploy` in install node modules folder, 
+`npm install` to install node modules folder, 
 `npx knex migrate:latest` to install most recent database schema,
 `npx knex seed:run` to initialize database, and
 `npm start` to start express.js server on port 4000
