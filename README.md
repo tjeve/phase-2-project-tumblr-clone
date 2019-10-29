@@ -15,7 +15,7 @@ This is a backend project that utilizes backend and database technologies such a
 | [Passport-facebook](http://www.passportjs.org/docs/facebook/) | Passport-facebook was used as a secondary authentication strategy                                                                                                    |
 | [Travis CI](https://travis-ci.com/) | Automated testing <img src="https://travis-ci.com/tjeve/phase-2-project-tumblr-clone.svg?branch=master"> |
 | [Standard JS](https://standardjs.com/) | Syntax check and test with Travis CI |
-| (faker JS)[https://github.com/marak/Faker.js/] | Generate fake data for users and posts |
+| [faker JS](https://github.com/marak/Faker.js/) | Generate fake data for users and posts |
 
 # Hosting URL
 
