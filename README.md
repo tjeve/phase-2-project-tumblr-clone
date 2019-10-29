@@ -15,7 +15,12 @@ This is a backend project that utilizes backend and database technologies such a
 | [Passport-facebook](http://www.passportjs.org/docs/facebook/) | Passport-facebook was used as a secondary authentication strategy                                                                                                    |
 | [Travis CI](https://travis-ci.com/) | Automated testing <img src="https://travis-ci.com/tjeve/phase-2-project-tumblr-clone.svg?branch=master"> |
 | [Standard JS](https://standardjs.com/) | Syntax check and test with Travis CI |
-| faker JS | Generate fake data for users and posts |
+| (faker JS)[https://github.com/marak/Faker.js/] | Generate fake data for users and posts |
+
+# Hosting URL
+
+https://digitalcrafts-tumblr-clone.herokuapp.com
+
 # Getting Started
 
 Clone this repository, install the technologies above. 
@@ -42,6 +47,8 @@ In the project directory, you can run these scripts in the following order:
 - Creating tables using migration and seeds 
 - Querying data from a database
 - Creating templates for html
+- User authentication with local and facebook
+- Website hosting on heroku with PostgresQL
 
 ### Collaborators
 * [Sue Park](https://github.com/suepark09)
